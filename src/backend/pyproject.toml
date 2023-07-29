@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "anthropic-hackathon"
+version = "0.1.0"
+description = ""
+authors = ["Ken, Terence, Tony, Tyron"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">3.9.7,<4.0"
+ctransformers = "0.2.14"
+faiss-cpu = "1.7.4"
+fastapi = "0.100.0"
+gptcache = "*"
+langchain = "0.0.240"
+openai = "0.27.8"
+PyMuPDF = "1.22.5"
+sentence-transformers = "2.2.2"
+streamlit = "1.24.0"
+torch = "*"
+uvicorn = {extras = ["standard"], version = "^0.23.1"}
+
+[tool.black]
+skip-string-normalization = true
+
+[tool.isort]
+include_trailing_comma = true
+force_grid_wrap = 2
+multi_line_output = 3
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    'ignore:Implicitly combining column'
+]
+log_cli = true
+log_cli_level = 'INFO'
+log_cli_format = '[%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)'
