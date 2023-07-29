@@ -1,0 +1,12 @@
+.LandingPage {
+  .card {
+    box-shadow: 0 2px 2px lightgray;
+    width: 300px;
+
+    .card-body {
+      & > :not(:first-child) {
+        margin-top: 16px;
+      }
+    }
+  }
+}
