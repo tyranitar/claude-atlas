@@ -14,7 +14,7 @@ Constraints:
 Input: 
 <user_input>Replace the 11am and 6pm locations</user_input>
 [ 
-{{ "name": "Exploratorium", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30" }}, 
+{{ "name": "Exploratorium", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30", image_url: "" }}, 
 
 {{ "name": "Ferry Building Marketplace", "latitude": 37.770383, "longitude": -122.4701793, "start_time": "11:00", "end_time": "12:30" }}, 
 

@@ -106,8 +106,8 @@ class Prompts:
    - If new location added to replace an existing event has start_time before 13:00, it has to be within 30 minutes walking distance of location with start_time at 13:00 and within 15 minutes walking distance of the location preceding it.
    - If new location added to replace an existing event has start_time after 16:30, it has to be more than 5km away from all locations with start_time before 13:00 and within 15 minutes walking distance of the location preceding it.
    - Do not alter data if the user did not request a change. Keep them the same.
-   ### 
-   Input: 
+   ###
+   Input:
    <user_input>Replace the 11am and 6pm locations</user_input>
    [ 
    {{ "name": "Exploratorium", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30" }},
@@ -141,7 +141,7 @@ class Prompts:
 
    ###
    Input:
-   <user_input>Replace the 1130am and 4pm locations</user_input>
+   <user_input>Change the Griffith Observatory location.</user_input>
 
    [
 
@@ -168,49 +168,11 @@ class Prompts:
 
    {{ "name": "The Broad Museum", "latitude": 34.0543942, "longitude": -118.2505867, "start_time": "13:30", "end_time": "15:00" }},
 
-   {{ "name": "Rodeo Drive", "latitude": 34.0696502, "longitude": -118.4052965, "start_time": "16:00", "end_time": "17:00" }},
+   {{ "name": "Hollywood Sign", "latitude": 34.1341151, "longitude": -118.3215482, "start_time": "16:00", "end_time": "17:00" }},
 
    {{ "name": "Universal Studios Hollywood", "latitude": 34.1381178, "longitude": -118.3533783, "start_time": "17:30", "end_time": "19:00" }},
 
    {{ "name": "Santa Monica Pier", "latitude": 34.0103472, "longitude": -118.4962278, "start_time": "19:30", "end_time": "21:00" }}
-
-   ]
-   </response>
-
-   ###
-   Input:
-   <user_input>Replace the 1030am and 630pm locations</user_input>
-
-   [
-
-   {{ "name": "National Mall", "latitude": 38.8896202, "longitude": -77.0229773, "start_time": "09:00", "end_time": "10:00" }},
-
-   {{ "name": "Smithsonian National Air and Space Museum", "latitude": 38.8881597, "longitude": -77.0198679, "start_time": "10:30", "end_time": "12:00" }},
-
-   {{ "name": "White House", "latitude": 38.8976763, "longitude": -77.0365298, "start_time": "13:00", "end_time": "14:00" }},
-
-   {{ "name": "Lincoln Memorial", "latitude": 38.889293, "longitude": -77.050138, "start_time": "15:00", "end_time": "16:00" }},
-
-   {{ "name": "Washington Monument", "latitude": 38.889484, "longitude": -77.035278, "start_time": "17:00", "end_time": "18:00" }},
-
-   {{ "name": "Thomas Jefferson Memorial", "latitude": 38.8813958, "longitude": -77.0365706, "start_time": "18:30", "end_time": "19:30" }}
-
-   ]
-
-   Output:
-   <response>
-   [
-   {{ "name": "National Mall", "latitude": 38.8896202, "longitude": -77.0229773, "start_time": "09:00", "end_time": "10:00" }},
-
-   {{ "name": "United States Capitol", "latitude": 38.889939, "longitude": -77.009051, "start_time": "10:30", "end_time": "12:00" }},
-
-   {{ "name": "White House", "latitude": 38.8976763, "longitude": -77.0365298, "start_time": "13:00", "end_time": "14:00" }},
-
-   {{ "name": "Lincoln Memorial", "latitude": 38.889293, "longitude": -77.050138, "start_time": "15:00", "end_time": "16:00" }},
-
-   {{ "name": "Washington Monument", "latitude": 38.889484, "longitude": -77.035278, "start_time": "17:00", "end_time": "18:00" }},
-
-   {{ "name": "National Gallery of Art", "latitude": 38.891298, "longitude": -77.019965, "start_time": "18:30", "end_time": "19:30" }}
 
    ]
    </response>

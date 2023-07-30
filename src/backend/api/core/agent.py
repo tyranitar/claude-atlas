@@ -20,7 +20,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-from api.core.formatter import Formatter
+from api.core.formatter import Formatter, gmaps
 from api.schemas.itinerary import ItineraryRequest
 from api.schemas.quest import QuestRequest
 from api.schemas.chat import ChatRequest
@@ -37,7 +37,7 @@ SCOPES = [
 class AgentEngine:
     def __init__(self, formatter: Formatter):
         self.llm = ChatAnthropic(
-            max_tokens_to_sample=1024,
+            max_tokens_to_sample=2048,
             temperature=0
         )
         self.prompts = Prompts()
@@ -151,6 +151,9 @@ class AgentEngine:
                 for key, val in self.formatter.address_cache.items():
                     if val == lat_long:
                         location = key
+                if not location:
+                    loc = gmaps.reverse_geocode(latlng=lat_long)
+                    location = loc[0]['formatted_address']
                 start_timestamp = f'2023-07-30T{itinerary.start_time}:00-07:00'
                 end_timestamp = f'2023-07-30T{itinerary.end_time}:00-07:00'
                 event = {
