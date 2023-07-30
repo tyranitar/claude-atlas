@@ -1,9 +1,17 @@
 import { QuestCard } from "components/QuestCard";
-import { Card, theme } from "antd";
-import { useLazyItineraryQuery } from "store/services/quests";
+import { Button, Card, Input, Tag, message, theme } from "antd";
+import {
+  QuestPlus,
+  updateQueryData,
+  useLazyItineraryQuery,
+} from "store/services/quests";
 import GoogleMapReact from "google-map-react";
-import { useEffect, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
+import { useEditQuestMutation } from "store/services/chat";
+import classNames from "classnames";
+import { getStore } from "store/accessor";
+import { useSyncCalendarMutation } from "store/services/calendar";
 
 const { useToken } = theme;
 
@@ -22,7 +30,167 @@ const MapPoint = ({ index }: { index: number }) => {
   );
 };
 
+// I hate 'as const'. That's all.
+const USER = "user" as const;
+const ASSISTANT = "assistant" as const;
+
+export function Chat({ itinerary }: { itinerary: QuestPlus[] }) {
+  const { token } = useToken();
+  const chatboxRef = useRef<HTMLDivElement | null>(null);
+
+  const [sendMessage, { isLoading }] = useEditQuestMutation();
+
+  const [messages, setMessages] = useState<
+    { sender: "user" | "assistant"; text: string }[]
+  >([
+    {
+      sender: ASSISTANT,
+      text: "Let me know if you'd like to make any changes!",
+    },
+    // { sender: USER, text: "test message one" },
+    // { sender: ASSISTANT, text: "test message one" },
+    // { sender: ASSISTANT, text: "Welcome to this awesome chat!" },
+    // { sender: USER, text: "test message one" },
+    // { sender: ASSISTANT, text: "test message one" },
+    // { sender: ASSISTANT, text: "Welcome to this awesome chat!" },
+    // { sender: USER, text: "test message one" },
+    // { sender: ASSISTANT, text: "test message one" },
+    // { sender: ASSISTANT, text: "Welcome to this awesome chat!" },
+    // { sender: USER, text: "test message one" },
+    // { sender: ASSISTANT, text: "test message one" },
+  ]);
+
+  // const fakeQuestArray = [
+  //   {
+  //     imageUrl: "https://example.com/image1.jpg",
+  //     name: "Product A",
+  //     description: "This is a cool product.",
+  //     funFacts: ["Fact 1", "Fact 2", "Fact 3"],
+  //     isMain: true,
+  //   },
+  //   {
+  //     imageUrl: "https://example.com/image2.jpg",
+  //     name: "Product B",
+  //     description: "Check out this amazing product.",
+  //     funFacts: ["Fact 4", "Fact 5"],
+  //     isMain: false,
+  //   },
+  //   {
+  //     imageUrl: "https://example.com/image3.jpg",
+  //     name: "Product C",
+  //     description: "Introducing the latest gadget.",
+  //     funFacts: ["Fact 6", "Fact 7", "Fact 8"],
+  //     isMain: true,
+  //   },
+  // ];
+
+  const [currentMessage, setCurrentMessage] = useState("");
+
+  // useEffect(() => {
+  //   addMessage('Welcome to this awesome chat!', ASSISTANT);
+  // }, []);
+
+  const addMessage = (text: string, sender: "user" | "assistant") => {
+    setMessages((prevMessages) => [...prevMessages, { text, sender }]);
+  };
+
+  const handleInput = async () => {
+    if (isLoading) {
+      return;
+    }
+
+    const params = new URLSearchParams(location.search);
+    const loc = params.get("location")!;
+    const quest = params.get("quest")!;
+
+    const result = await sendMessage({
+      message: currentMessage,
+      location: loc,
+      itinerary,
+    });
+
+    if ("error" in result) {
+      return;
+    }
+
+    const { data: newItinerary } = result;
+
+    getStore().dispatch(
+      updateQueryData(
+        "itinerary",
+        { location: loc, quest },
+        (itinerary) => newItinerary
+      )
+    );
+
+    addMessage(currentMessage, USER);
+    setCurrentMessage("");
+
+    chatboxRef.current?.scrollTo({
+      top: Number.MAX_SAFE_INTEGER,
+      behavior: "smooth",
+    });
+
+    // console.log(res);
+    // console.log(messages);
+  };
+
+  const handleEnter = (evt: KeyboardEvent) => {
+    if (evt.key === "Enter") {
+      handleInput();
+    }
+  };
+
+  return (
+    <div className={styles.Chat}>
+      {/* <Card className={styles["chat-card"]}> */}
+      <div className={styles["chatbox"]} ref={chatboxRef}>
+        {messages.map((message, index) => {
+          const msgStyle =
+            message.sender === USER
+              ? styles["message-user"]
+              : styles["message-assistant"];
+
+          return (
+            <Card
+              key={index}
+              className={`${styles["chat-card"]} ${msgStyle}`}
+              style={{
+                backgroundColor:
+                  message.sender === "user" ? token.colorPrimary : undefined,
+                color: message.sender === "user" ? "white" : undefined,
+              }}
+            >
+              <div>{`${message.sender === "assistant" ? "🤖" : "🤔"}: ${
+                message.text
+              }`}</div>
+            </Card>
+          );
+        })}
+      </div>
+      <div onKeyDown={handleEnter} className={styles["flex"]}>
+        <Input
+          className={styles["input"]}
+          value={currentMessage}
+          onChange={(evt) => setCurrentMessage(evt.target.value)}
+        />
+        <Button
+          className={styles["send-btn"]}
+          onClick={handleInput}
+          loading={isLoading}
+          type="primary"
+        >
+          Send
+        </Button>
+      </div>
+      {/* </Card> */}
+    </div>
+  );
+}
+
 export default function ItineraryPage() {
+  const [syncCalendar, { isLoading: isCalendarLoading }] =
+    useSyncCalendarMutation();
   const [trigger, { data, isLoading, error }] = useLazyItineraryQuery();
   const [quest, setQuest] = useState("");
   const [loc, setLoc] = useState("");
@@ -50,31 +218,24 @@ export default function ItineraryPage() {
       >
         <div>Your trip to {loc}</div>
         <div>{quest}</div>
+        <Button
+          loading={isCalendarLoading}
+          onClick={async () => {
+            if (!data) {
+              return;
+            }
+
+            await syncCalendar(data);
+
+            message.success("Synced to calendar!");
+          }}
+        >
+          Export to calendar
+        </Button>
       </div>
       <div className={styles["left-column"]}>
         <div className={styles["itinerary"]}>
           <Card className={styles["card"]}>
-            {/* <QuestCard imageSrc="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/33/dc/8a/caption.jpg?w=700&h=-1&s=1">
-              <div>Test</div>
-            </QuestCard>
-            <QuestCard imageSrc="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/33/dc/8a/caption.jpg?w=700&h=-1&s=1">
-              <div>Test</div>
-            </QuestCard>
-            <QuestCard imageSrc="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/33/dc/8a/caption.jpg?w=700&h=-1&s=1">
-              <div>Test</div>
-            </QuestCard>
-            <QuestCard imageSrc="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/33/dc/8a/caption.jpg?w=700&h=-1&s=1">
-              <div>Test</div>
-            </QuestCard>
-            <QuestCard imageSrc="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/33/dc/8a/caption.jpg?w=700&h=-1&s=1">
-              <div>Test</div>
-            </QuestCard>
-            <QuestCard imageSrc="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/33/dc/8a/caption.jpg?w=700&h=-1&s=1">
-              <div>Test</div>
-            </QuestCard>
-            <QuestCard imageSrc="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/33/dc/8a/caption.jpg?w=700&h=-1&s=1">
-              <div>Test</div>
-            </QuestCard> */}
             {isLoading ? (
               <div>
                 <LoadingOutlined />
@@ -94,8 +255,13 @@ export default function ItineraryPage() {
                   idx
                 ) => (
                   <QuestCard key={idx} imageSrc={imageUrl}>
-                    <div>
+                    <div style={{ fontSize: "16px" }}>
                       {idx + 1}. {name}
+                    </div>
+                    {/* <div>{description}</div> */}
+                    <div>
+                      Start: <Tag color={token.colorPrimary}>{startTime}</Tag>
+                      End: <Tag color={token.colorPrimary}>{endTime}</Tag>
                     </div>
                   </QuestCard>
                 )
@@ -149,7 +315,9 @@ export default function ItineraryPage() {
           </Card>
         </div>
         <div className={styles["chat"]}>
-          <Card className={styles["card"]}>Test</Card>
+          <Card className={styles["card"]}>
+            {data && <Chat itinerary={data} />}
+          </Card>
         </div>
       </div>
       <div className={styles["sidebar"]}>{/* <div>Your </div> */}</div>

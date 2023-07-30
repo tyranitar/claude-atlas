@@ -100,3 +100,69 @@
   align-items: center;
   justify-content: center;
 }
+
+.Chat {
+  display: flex;
+  flex-direction: column;
+
+  .chat-card {
+    // box-shadow: 0 2px 2px rgb(83, 105, 215);
+
+    :global .ant-card-body {
+      // padding-block: 0.5rem;
+      padding: 8px 12px;
+    }
+
+    .card-body {
+      & > :not(:first-child) {
+        margin-top: 16px;
+      }
+
+      padding: 0;
+    }
+  }
+
+  .message-user {
+    align-self: end;
+  }
+
+  .message-assistant {
+    align-self: start;
+  }
+
+  .chatbox {
+    padding: 8px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    // width: 30rem;
+
+    // flex-grow: 1;
+    // height: calc(100% - 40px);
+    height: 365px;
+    overflow: auto;
+  }
+
+  .send-btn {
+    align-self: end;
+    // margin-top: 0.5rem;
+  }
+
+  .flex {
+    padding: 8px;
+    display: flex;
+
+    // .input {
+    //   width: 400px;
+    // }
+
+    gap: 8px;
+  }
+}
+
+// .chat-message-sender {
+//   color: #999;
+//   font-size: 12px;
+//   margin-bottom: 4px;
+// }

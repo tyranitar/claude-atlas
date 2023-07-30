@@ -1,14 +1,26 @@
 import { Quest } from "types";
 import { baseApi } from ".";
 
+export type QuestPlus = Quest & {
+  latitude: number;
+  longitude: number;
+  name: string;
+  startTime: string;
+  endTime: string;
+};
+
 const questsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    mainQuests: build.query<[Quest, Quest, Quest], string>({
-      query: (location: string) => ({
+    mainQuests: build.query<
+      [Quest, Quest, Quest],
+      { location: string; questNames?: string[] }
+    >({
+      query: ({ location, questNames }) => ({
         method: "POST",
         url: `quests`,
         body: {
           city: location,
+          rejected_options: questNames,
         },
       }),
 
@@ -22,16 +34,7 @@ const questsApi = baseApi.injectEndpoints({
       },
     }),
 
-    itinerary: build.query<
-      (Quest & {
-        latitude: number;
-        longitude: number;
-        name: string;
-        startTime: string;
-        endTime: string;
-      })[],
-      { location: string; quest: string }
-    >({
+    itinerary: build.query<QuestPlus[], { location: string; quest: string }>({
       query: ({ location, quest }) => ({
         method: "POST",
         url: "itinerary",
@@ -73,4 +76,5 @@ export const {
   useMainQuestsQuery,
   useLazyMainQuestsQuery,
   useLazyItineraryQuery,
+  util: { updateQueryData },
 } = questsApi;

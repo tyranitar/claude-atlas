@@ -3,7 +3,9 @@ import { Button, Card, Typography, theme } from "antd";
 import { QuestCard } from "components/QuestCard";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { getStore } from "store/accessor";
 import {
+  updateQueryData,
   useLazyMainQuestsQuery,
   useMainQuestsQuery,
 } from "store/services/quests";
@@ -12,11 +14,31 @@ const styles = require("./index.module.scss");
 
 const { useToken } = theme;
 
-function RegenerateOptions() {
+function RegenerateOptions({ questNames }: { questNames?: string[] }) {
+  const [trigger, { isLoading }] = useLazyMainQuestsQuery();
+
   return (
     <div className={styles.RegenerateOptions}>
       <div>{"🤔 Don't like any of the options?"}</div>
-      <Button icon={<SyncOutlined />}>{"Give me new recommendations"}</Button>
+      <Button
+        // icon={<SyncOutlined />}
+        loading={isLoading}
+        onClick={async () => {
+          const loc = new URLSearchParams(location.search).get("location")!;
+
+          const result = await trigger({ location: loc, questNames });
+
+          if ("error" in result) {
+            return;
+          }
+
+          getStore().dispatch(
+            updateQueryData("mainQuests", { location: loc }, () => result.data)
+          );
+        }}
+      >
+        {"Give me new recommendations"}
+      </Button>
     </div>
   );
 }
@@ -28,7 +50,9 @@ export default function MainQuestsPage() {
   const router = useRouter();
 
   useEffect(() => {
-    trigger(new URLSearchParams(location.search).get("location")!);
+    trigger({
+      location: new URLSearchParams(location.search).get("location")!,
+    });
   }, [trigger]);
 
   return (
@@ -55,11 +79,13 @@ export default function MainQuestsPage() {
               <QuestCard imageSrc={imageUrl} key={idx}>
                 <div className={styles["card-container"]}>
                   <div className={styles["card-content"]}>
-                    <div>{name}</div>
+                    <div style={{ fontSize: "20px" }}>{name}</div>
                     <div className={styles["fun-facts"]}>
-                      {funFacts.map((funFact, idx) => (
-                        <div key={idx}>{funFact}</div>
-                      ))}
+                      <ul style={{ paddingInlineStart: "20px" }}>
+                        {funFacts.map((funFact, idx) => (
+                          <li key={idx}>{funFact}</li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                   <div className={styles["card-footer"]}>
@@ -115,7 +141,7 @@ export default function MainQuestsPage() {
               </div>
             </QuestCard> */}
           </div>
-          <RegenerateOptions />
+          <RegenerateOptions questNames={quests?.map(({ name }) => name)} />
         </>
       )}
       <div
