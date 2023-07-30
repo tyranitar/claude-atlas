@@ -130,11 +130,18 @@ export function Chat({ itinerary }: { itinerary: QuestPlus[] }) {
     const loc = params.get("location")!;
     const quest = params.get("quest")!;
 
+    const userMessages = messages.filter(({ sender }) => sender === "user");
+
     addMessage(currentMessage, USER);
     setCurrentMessage("");
 
     const result = await sendMessage({
-      message: currentMessage,
+      message:
+        userMessages.length > 0
+          ? [userMessages[userMessages.length - 1]!.text, currentMessage].join(
+              ". "
+            )
+          : currentMessage,
       location: loc,
       itinerary,
     });

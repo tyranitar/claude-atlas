@@ -26,7 +26,10 @@ export default function LandingPage() {
   };
 
   return (
-    <div className={styles.LandingPage}>
+    <div
+      className={styles.LandingPage}
+      style={{ backgroundColor: token.colorPrimary }}
+    >
       <Card className={styles["card"]}>
         <div
           className={styles["card-body"]}

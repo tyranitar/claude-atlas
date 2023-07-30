@@ -3,11 +3,14 @@ import "../styles/global.scss";
 import { ConfigProvider } from "antd";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { wrapper } from "store";
 
 const styles = require("./App.module.scss");
 
 export function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
   return (
     <ConfigProvider
       theme={{
@@ -26,7 +29,9 @@ export function App({ Component, pageProps }: AppProps) {
           />
         </Head>
         <Component {...pageProps} />
-        <div className={styles["emoji"]}>☁️</div>
+        {router.asPath !== "/landing" && (
+          <div className={styles["emoji"]}>☁️</div>
+        )}
       </div>
     </ConfigProvider>
   );
