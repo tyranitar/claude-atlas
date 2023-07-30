@@ -1,3 +1,5 @@
+import os
+import json
 import langchain
 from langchain.chat_models import ChatAnthropic
 from langchain.cache import InMemoryCache
@@ -12,18 +14,31 @@ from langchain.prompts.chat import (
     HumanMessagePromptTemplate,
 )
 
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+
+from api.core.formatter import Formatter
 from api.schemas.itinerary import ItineraryRequest
 from api.schemas.quest import QuestRequest
 from api.schemas.chat import ChatRequest
+from api.schemas.gmail import SyncCalendarRequest
 from api.core.prompts import Prompts
 
 
 langchain.llm_cache = InMemoryCache()
+# If modifying these scopes, delete the file token.json.
+SCOPES = [
+    'https://www.googleapis.com/auth/calendar'
+]
 
 class AgentEngine:
-    def __init__(self):
+    def __init__(self, formatter: Formatter):
         self.llm = ChatAnthropic()
         self.prompts = Prompts()
+        self.formatter = formatter
 
     def generate_quests(self, request: QuestRequest) -> str:
         prompts = Prompts()
@@ -56,6 +71,21 @@ class AgentEngine:
             output_variables=["morning_itinerary", "main_quest_itinerary", "afternoon_itinerary"],
         )
         response = overall_chain({"city": request.city, "quest": request.quest})
+
+        return response
+    
+    def regenerate_itinerary(self, request: ChatRequest) -> str:
+        itinerary = [block.__dict__ for block in request.itinerary]
+        itinerary_str = json.dumps(itinerary)
+        prompts = Prompts()
+        prompt = PromptTemplate(
+            input_variables=["itinerary", "input"],
+            template=prompts.REGENERATE_ITINERARY_PROMPT,
+        )
+        chain = LLMChain(llm=self.llm, prompt=prompt)
+        response = chain.run(itinerary=itinerary_str, input=request.input)
+        print("See resp")
+        print(response)
 
         return response
 
@@ -92,3 +122,57 @@ class AgentEngine:
         result = conversation.predict(input=input)
 
         return result
+
+    @staticmethod
+    def sync_calendar(request: SyncCalendarRequest) -> bool:
+        creds = None
+        # The file token.json stores the user's access and refresh tokens, and is
+        # created automatically when the authorization flow completes for the first
+        # time.
+        if os.path.exists('token.json'):
+            creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+        # If there are no (valid) credentials available, let the user log in.
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    'credentials.json', SCOPES)
+                creds = flow.run_local_server(port=0)
+            # Save the credentials for the next run
+            with open('token.json', 'w') as token:
+                token.write(creds.to_json())
+
+        try:
+            service = build('calendar', 'v3', credentials=creds)
+            for itinerary in request.events:
+                start_timestamp = f'2023-07-30T{itinerary.start_time}:00-07:00'
+                end_timestamp = f'2023-07-30T{itinerary.end_time}:00-07:00'
+                event = {
+                    'summary': f'Visit to {itinerary.name}',
+                    'start': {
+                        'dateTime': start_timestamp,
+                        'timeZone': 'America/Los_Angeles',
+                    },
+                    'end': {
+                        'dateTime': end_timestamp,
+                        'timeZone': 'America/Los_Angeles',
+                    },
+                    'attendees': [
+                        {'email': 'terencelimxp@gmail.com'},
+                        {'email': 'ken.kc.chew@gmail.com'},
+                    ],
+                    'reminders': {
+                        'useDefault': False,
+                        'overrides': [
+                            {'method': 'email', 'minutes': 24 * 60},
+                            {'method': 'popup', 'minutes': 10},
+                        ],
+                    },
+                }
+                event = service.events().insert(calendarId='primary', body=event).execute()
+                print('Event created: %s' % (event.get('htmlLink')))
+            return True
+        except HttpError as error:
+            print('An error occurred: %s' % error)
+        return False

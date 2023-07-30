@@ -1,9 +1,11 @@
+from typing import Union
+
 import googlemaps
 import json
 
 from api.schemas.quest import QuestResponse, Quest
 from api.schemas.itinerary import ItineraryResponse, ItineraryBlock
-# from api.schemas.chat import ChatResponse
+from api.schemas.chat import ChatResponse
 
 
 BLOCK_START_TAG = "<response>"
@@ -20,6 +22,18 @@ class Formatter:
     @staticmethod
     def format_cache_key(location: str) -> str:
         return location.replace(" ", "-").replace("'", '').replace(",", '').lower()
+    
+    @classmethod
+    def get_or_cache(cls, image_key: str, location: str, city: str):
+        image_url = cls.image_cache.get(image_key)
+        # https://developers.google.com/maps/documentation/places/web-service/photos
+        if not image_url:
+            print(f"Image for {location} not found in cache...calling the GMaps API...")
+            place = gmaps.places(query=f"{location}, {city}")
+            photo_reference = place["results"][0]["photos"][0]["photo_reference"]
+            image_url = f"""https://maps.googleapis.com/maps/api/place/photo?maxwidth={MAX_WIDTH}&maxheight={MAX_HEIGHT}&photo_reference={photo_reference}&key={GOOGLE_API_KEY}"""
+            cls.image_cache[image_key] = image_url
+        return image_url
 
     @classmethod
     def format_quest(cls, city: str, response: str) -> QuestResponse:
@@ -33,13 +47,11 @@ class Formatter:
         for quest in resp:
             location = quest["location"]
             image_formatted_location = cls.format_cache_key(location)
-            image_url = cls.image_cache.get(image_formatted_location)
-            if not image_url:
-                print(f"Image for {location} not found in cache...calling the GMaps API...")
-                place = gmaps.places(query=f"{quest['location']}, {city}")
-                photo_reference = place["results"][0]["photos"][0]["photo_reference"]
-                image_url = f"""https://maps.googleapis.com/maps/api/place/photo?maxwidth={MAX_WIDTH}&maxheight={MAX_HEIGHT}&photo_reference={photo_reference}&key={GOOGLE_API_KEY}"""
-                cls.image_cache[image_formatted_location] = image_url
+            image_url = cls.get_or_cache(
+                image_key=image_formatted_location,
+                location=location,
+                city=city,
+            )
             responses.append(
                 Quest(
                     name=location,
@@ -84,14 +96,19 @@ class Formatter:
         for itinerary_block in full_day_itinerary:
             location_name = itinerary_block["location_name"]
             geosearch_query = f'{location_name}, {city}'
-            image_formatted_location = cls.format_cache_key(geosearch_query)
-            cached_value = cls.lat_long_cache.get(image_formatted_location)
+            latlong_formatted_location = cls.format_cache_key(geosearch_query)
+            image_url = cls.get_or_cache(
+                image_key=latlong_formatted_location,
+                location=location_name,
+                city=city,
+            )
+            cached_value = cls.lat_long_cache.get(latlong_formatted_location)
             if not cached_value:
                 print(f"Lat-long for {geosearch_query} not found in cache...calling the GMaps API...")
                 geocode_result = gmaps.geocode(geosearch_query)
                 latitude = geocode_result[0]['geometry']['location']['lat']
                 longitude = geocode_result[0]['geometry']['location']['lng']
-                cls.lat_long_cache[image_formatted_location] = (latitude, longitude)
+                cls.lat_long_cache[latlong_formatted_location] = (latitude, longitude)
             else:
                 latitude = cached_value[0]
                 longitude = cached_value[1]
@@ -102,9 +119,31 @@ class Formatter:
                     longitude=longitude,
                     start_time=itinerary_block["start_time"],
                     end_time=itinerary_block["end_time"],
+                    image_url=image_url,
                 )
             )
         formatted_response = ItineraryResponse(
+            response=itinerary_blocks
+        )
+
+        return formatted_response
+
+    @classmethod
+    def format_regenerate_itinerary(cls, response: str, city: str) -> ItineraryResponse:
+        idx1 = response.index(BLOCK_START_TAG)
+        idx2 = response.index(BLOCK_END_TAG)
+
+        response = response[idx1 + len(BLOCK_START_TAG) + 1: idx2]
+        itinerary = json.loads(response)
+        print(itinerary)
+
+        itinerary_blocks = []
+        # image_formatted_location = cls.format_cache_key(location)
+        # image_url = cls.get_or_cache(
+        #     image_key=image_formatted_location,
+        #     location=location,
+        # )
+        formatted_response = ChatResponse(
             response=itinerary_blocks
         )
 

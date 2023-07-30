@@ -2,10 +2,12 @@ from typing import List
 
 from pydantic import BaseModel
 
-
-class BaseChat(BaseModel):
-    role: str
-    content: str
+from api.schemas.itinerary import ItineraryBlock
 
 class ChatRequest(BaseModel):
-    messages: List[BaseChat]
+    city: str
+    itinerary: List[ItineraryBlock]
+    input: str
+
+class ChatResponse(BaseModel):
+    response: List[ItineraryBlock]

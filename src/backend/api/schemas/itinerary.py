@@ -8,6 +8,7 @@ class ItineraryBlock(BaseModel):
     longitude: float
     start_time: str
     end_time: str
+    image_url: str
 
 class ItineraryRequest(BaseModel):
     city: str

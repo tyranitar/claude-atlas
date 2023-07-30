@@ -101,17 +101,12 @@ class Prompts:
    REGENERATE_ITINERARY_PROMPT = """
    The following is the itinerary for the day:
 
-   <response>
    {itinerary}
-   </response>
+
    Constraints:
-
    - <user_input>{input}</user_input>
-
    - New location added to replace an existing location has to have the same start_time and end_time as the location it is replacing.
-
    - If new location added to replace an existing location has start_time before 13:00, it has to be within 15 minutes walking distance of location with start_time at 13:00 and within 15 minutes walking distance of the location immediately preceding it.
-
    - If new location added to replace an existing location has start_time after 16:30, it has to be within 15 minutes walking distance of the location immediately preceding it but more than 5km away from the location with start_time before 10:30.
 
    Regenerate itinerary using the above constraints, while keeping the format of the itinerary output.
