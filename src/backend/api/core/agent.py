@@ -79,6 +79,13 @@ class AgentEngine:
     
     def regenerate_itinerary(self, request: ChatRequest) -> str:
         itinerary = [block.__dict__ for block in request.itinerary]
+        for block in itinerary:
+            if 'latitude' in block:
+                del block['latitude']
+            if 'longitude' in block:
+                del block['longitude']
+            if 'image_url' in block:
+                del block['image_url']
         itinerary_str = json.dumps(itinerary)
         prompts = Prompts()
         prompt = PromptTemplate(
