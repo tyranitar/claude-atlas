@@ -30,6 +30,30 @@ const MapPoint = ({ index }: { index: number }) => {
   );
 };
 
+function formatTime(time: string) {
+  const [hour, minute] = time.split(":") as [string, string];
+
+  if (parseInt(hour) < 12) {
+    return time + " am";
+  }
+
+  if (parseInt(hour) === 12) {
+    return time + " pm";
+  }
+
+  if (parseInt(hour) === 24) {
+    return [12, minute].join(":") + " am";
+  }
+
+  let newHourString = (parseInt(hour) % 12).toString();
+
+  if (newHourString.length === 1) {
+    newHourString = "0" + newHourString;
+  }
+
+  return [newHourString, minute].join(":") + " pm";
+}
+
 // I hate 'as const'. That's all.
 const USER = "user" as const;
 const ASSISTANT = "assistant" as const;
@@ -39,6 +63,9 @@ export function Chat({ itinerary }: { itinerary: QuestPlus[] }) {
   const chatboxRef = useRef<HTMLDivElement | null>(null);
 
   const [sendMessage, { isLoading }] = useEditQuestMutation();
+
+  const [syncCalendar, { isLoading: isCalendarLoading }] =
+    useSyncCalendarMutation();
 
   const [messages, setMessages] = useState<
     { sender: "user" | "assistant"; text: string }[]
@@ -103,6 +130,9 @@ export function Chat({ itinerary }: { itinerary: QuestPlus[] }) {
     const loc = params.get("location")!;
     const quest = params.get("quest")!;
 
+    addMessage(currentMessage, USER);
+    setCurrentMessage("");
+
     const result = await sendMessage({
       message: currentMessage,
       location: loc,
@@ -110,8 +140,12 @@ export function Chat({ itinerary }: { itinerary: QuestPlus[] }) {
     });
 
     if ("error" in result) {
+      addMessage("I'm sorry, there was an error. Please try again.", ASSISTANT);
+
       return;
     }
+
+    addMessage("Done! Would you like to make any other changes?", ASSISTANT);
 
     const { data: newItinerary } = result;
 
@@ -122,9 +156,6 @@ export function Chat({ itinerary }: { itinerary: QuestPlus[] }) {
         (itinerary) => newItinerary
       )
     );
-
-    addMessage(currentMessage, USER);
-    setCurrentMessage("");
 
     chatboxRef.current?.scrollTo({
       top: Number.MAX_SAFE_INTEGER,
@@ -170,6 +201,7 @@ export function Chat({ itinerary }: { itinerary: QuestPlus[] }) {
       </div>
       <div onKeyDown={handleEnter} className={styles["flex"]}>
         <Input
+          placeholder="Ask Claude to modify the itinerary"
           className={styles["input"]}
           value={currentMessage}
           onChange={(evt) => setCurrentMessage(evt.target.value)}
@@ -178,9 +210,24 @@ export function Chat({ itinerary }: { itinerary: QuestPlus[] }) {
           className={styles["send-btn"]}
           onClick={handleInput}
           loading={isLoading}
-          type="primary"
+          // type="primary"
         >
-          Send
+          {isLoading ? "Working..." : "Send"}
+        </Button>
+        <Button
+          loading={isCalendarLoading}
+          type="primary"
+          onClick={async () => {
+            if (!itinerary) {
+              return;
+            }
+
+            await syncCalendar(itinerary);
+
+            message.success("Synced to calendar!");
+          }}
+        >
+          🎉 Export to calendar
         </Button>
       </div>
       {/* </Card> */}
@@ -189,8 +236,6 @@ export function Chat({ itinerary }: { itinerary: QuestPlus[] }) {
 }
 
 export default function ItineraryPage() {
-  const [syncCalendar, { isLoading: isCalendarLoading }] =
-    useSyncCalendarMutation();
   const [trigger, { data, isLoading, error }] = useLazyItineraryQuery();
   const [quest, setQuest] = useState("");
   const [loc, setLoc] = useState("");
@@ -211,27 +256,18 @@ export default function ItineraryPage() {
   }, [trigger]);
 
   return (
-    <div className={styles.ItineraryPage}>
+    <div
+      className={styles.ItineraryPage}
+      // style={{ backgroundColor: token.colorPrimary }}
+    >
       <div
         className={styles["sidebar"]}
         style={{ backgroundColor: token.colorPrimary }}
       >
-        <div>Your trip to {loc}</div>
+        <div>
+          Your trip to <i>{loc}</i>
+        </div>
         <div>{quest}</div>
-        <Button
-          loading={isCalendarLoading}
-          onClick={async () => {
-            if (!data) {
-              return;
-            }
-
-            await syncCalendar(data);
-
-            message.success("Synced to calendar!");
-          }}
-        >
-          Export to calendar
-        </Button>
       </div>
       <div className={styles["left-column"]}>
         <div className={styles["itinerary"]}>
@@ -260,8 +296,14 @@ export default function ItineraryPage() {
                     </div>
                     {/* <div>{description}</div> */}
                     <div>
-                      Start: <Tag color={token.colorPrimary}>{startTime}</Tag>
-                      End: <Tag color={token.colorPrimary}>{endTime}</Tag>
+                      Start:{" "}
+                      <Tag color={token.colorPrimary}>
+                        {formatTime(startTime)}
+                      </Tag>
+                      End:{" "}
+                      <Tag color={token.colorPrimary}>
+                        {formatTime(endTime)}
+                      </Tag>
                     </div>
                   </QuestCard>
                 )
@@ -320,7 +362,12 @@ export default function ItineraryPage() {
           </Card>
         </div>
       </div>
-      <div className={styles["sidebar"]}>{/* <div>Your </div> */}</div>
+      <div
+        className={styles["sidebar"]}
+        style={{ backgroundColor: token.colorPrimary }}
+      >
+        {/* <div>Your </div> */}
+      </div>
     </div>
   );
 }

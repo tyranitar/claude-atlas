@@ -12,13 +12,21 @@ export function App({ Component, pageProps }: AppProps) {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: "#536dfe",
+          colorPrimary: "#82b1ff",
         },
       }}
     >
       <div className={styles["App"]}>
-        {/* <Head></Head> */}
+        <Head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"
+            rel="stylesheet"
+          />
+        </Head>
         <Component {...pageProps} />
+        <div className={styles["emoji"]}>☁️</div>
       </div>
     </ConfigProvider>
   );

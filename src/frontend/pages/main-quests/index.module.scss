@@ -109,6 +109,16 @@
     }
   }
 
+  .anim-init {
+    opacity: 0;
+
+    transition: opacity 1s;
+
+    &.anim-fade {
+      opacity: 1;
+    }
+  }
+
   .RegenerateOptions {
     display: flex;
     flex-direction: column;

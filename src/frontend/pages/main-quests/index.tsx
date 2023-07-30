@@ -1,8 +1,9 @@
 import { LoadingOutlined, SyncOutlined } from "@ant-design/icons";
 import { Button, Card, Typography, theme } from "antd";
+import classNames from "classnames";
 import { QuestCard } from "components/QuestCard";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getStore } from "store/accessor";
 import {
   updateQueryData,
@@ -14,7 +15,13 @@ const styles = require("./index.module.scss");
 
 const { useToken } = theme;
 
-function RegenerateOptions({ questNames }: { questNames?: string[] }) {
+function RegenerateOptions({
+  questNames,
+  onClick,
+}: {
+  questNames?: string[];
+  onClick: () => void;
+}) {
   const [trigger, { isLoading }] = useLazyMainQuestsQuery();
 
   return (
@@ -24,6 +31,8 @@ function RegenerateOptions({ questNames }: { questNames?: string[] }) {
         // icon={<SyncOutlined />}
         loading={isLoading}
         onClick={async () => {
+          onClick();
+
           const loc = new URLSearchParams(location.search).get("location")!;
 
           const result = await trigger({ location: loc, questNames });
@@ -55,10 +64,18 @@ export default function MainQuestsPage() {
     });
   }, [trigger]);
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (quests) {
+      setTimeout(() => setIsLoaded(true));
+    }
+  }, [quests]);
+
   return (
     <div className={styles["MainQuestsPage"]}>
       <div className={styles["header"]} style={{ color: token.colorPrimary }}>
-        Choose your main quest
+        Pick your main quest
       </div>
       {isLoading ? (
         <div className={styles["loading-container"]}>
@@ -76,38 +93,48 @@ export default function MainQuestsPage() {
         <>
           <div className={styles["quests"]}>
             {quests?.map(({ imageUrl, name, funFacts }, idx) => (
-              <QuestCard imageSrc={imageUrl} key={idx}>
-                <div className={styles["card-container"]}>
-                  <div className={styles["card-content"]}>
-                    <div style={{ fontSize: "20px" }}>{name}</div>
-                    <div className={styles["fun-facts"]}>
-                      <ul style={{ paddingInlineStart: "20px" }}>
-                        {funFacts.map((funFact, idx) => (
-                          <li key={idx}>{funFact}</li>
-                        ))}
-                      </ul>
+              <div
+                key={idx}
+                className={classNames({
+                  [styles["anim-init"]]: true,
+                  [styles["anim-fade"]]: isLoaded,
+                })}
+              >
+                <QuestCard imageSrc={imageUrl}>
+                  <div className={styles["card-container"]}>
+                    <div className={styles["card-content"]}>
+                      <div style={{ fontSize: "20px", fontWeight: "bold" }}>
+                        {name}
+                      </div>
+                      <div className={styles["fun-facts"]}>
+                        <ul style={{ paddingInlineStart: "20px" }}>
+                          {funFacts.map((funFact, idx) => (
+                            <li key={idx}>{funFact}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                    <div className={styles["card-footer"]}>
+                      <Button
+                        type="primary"
+                        block
+                        onClick={() => {
+                          const params = new URLSearchParams(location.search);
+                          const loc = params.get("location")!;
+
+                          router.push(
+                            `/itinerary?location=${encodeURIComponent(
+                              loc
+                            )}&quest=${encodeURIComponent(name)}`
+                          );
+                        }}
+                      >
+                        {"Let's go with this!"}
+                      </Button>
                     </div>
                   </div>
-                  <div className={styles["card-footer"]}>
-                    <Button
-                      type="primary"
-                      block
-                      onClick={() => {
-                        const params = new URLSearchParams(location.search);
-                        const loc = params.get("location")!;
-
-                        router.push(
-                          `/itinerary?location=${encodeURIComponent(
-                            loc
-                          )}&quest=${encodeURIComponent(name)}`
-                        );
-                      }}
-                    >
-                      {"Let's go with this!"}
-                    </Button>
-                  </div>
-                </div>
-              </QuestCard>
+                </QuestCard>
+              </div>
             ))}
             {/* <QuestCard>
               <div className={styles["card-content"]}>
@@ -141,7 +168,10 @@ export default function MainQuestsPage() {
               </div>
             </QuestCard> */}
           </div>
-          <RegenerateOptions questNames={quests?.map(({ name }) => name)} />
+          <RegenerateOptions
+            questNames={quests?.map(({ name }) => name)}
+            onClick={() => setIsLoaded(false)}
+          />
         </>
       )}
       <div

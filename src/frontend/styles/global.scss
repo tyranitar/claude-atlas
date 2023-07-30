@@ -8,9 +8,11 @@ html {
     height: 100%;
     margin: 0px;
 
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
-      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    // font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    //   "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    //   "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+    font-family: "Montserrat", sans-serif !important;
 
     display: flex;
     justify-content: center;
@@ -25,4 +27,11 @@ html {
   a {
     text-decoration: none;
   }
+}
+
+.ant-card,
+.ant-btn,
+.ant-input,
+.ant-tag {
+  font-family: "Montserrat", sans-serif !important;
 }
