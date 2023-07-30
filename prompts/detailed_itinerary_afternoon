@@ -1,0 +1,45 @@
+-- Detailed Itinerary Afternoon
+
+
+<prompt>
+"""
+Constraints: 
+- I'm visiting <city_name> San Francisco </city_name>.  
+- Exclude <main_quest> Golden Gate Park </main_quest>.
+- Exclude locations within 5km of the following: <morning_itinerary>[ { "location_name": "Fisherman's Wharf", "location_address": "2850 Taylor St, San Francisco, CA 94133", "start_time": {"09:00"}, "end_time": {"10:00"} }, { "location_name": "Lombard Street", "location_address": "Lombard St, San Francisco, CA 94123", "start_time": {"10:30"}, "end_time": {"11:30"} }, { "location_name": "Pier 39", "location_address": "Beach St &, The Embarcadero, San Francisco, CA 94133", "start_time": {"12:00"}, "end_time": {"12:30"} } ]</morning_itinerary>
+- Start at 4:30pm and end at 9pm. 
+- Stay at each location for 60 minutes.
+- Leave a 30 minutes gap between locations for travel time.
+- Keep locations within 5km of each other.
+
+Design an itinerary around the constraints, in the following format:
+<response>
+[ 
+    { "location_name": "XXX", 
+    "location_address": "XXX", 
+    "latitude": "XXX.XXXXXXX",  
+    "longtitude": "XXX.XXXXXXX",
+    "start_time": "XX:XX",  
+    "end_time": "XX:XX", 
+    } 
+], ... ,
+[ 
+    { "location_name": "XXX", 
+    "location_address": "XXX", 
+    "latitude": "XXX.XXXXXXX",  
+    "longtitude": "XXX.XXXXXXX",
+    "start_time": "XX:XX",  
+    "end_time": "XX:XX", 
+    } 
+]
+</response>
+
+"""
+</prompt>
+
+-- Example output:
+
+Here is a suggested evening itinerary for your day in San Francisco excluding locations within 5km of Fisherman's Wharf, Lombard Street, and Pier 39:
+
+<response> [ { "location_name": "Legion of Honor", "location_address": "100 34th Ave, San Francisco, CA 94121", "start_time": {"16:30"}, "end_time": {"17:30"} }, { "location_name": "Lands End Trail", "location_address": "680 Point Lobos Ave, San Francisco, CA 94121", "start_time": {"18:00"}, "end_time": {"19:00"} }, { "location_name": "Cliff House", "location_address": "1090 Point Lobos Ave, San Francisco, CA 94121", "start_time": {"19:30"}, "end_time": {"20:30"} } ] </response>
+I selected some scenic spots in the northwest area of San Francisco like the Legion of Honor museum, Lands End hiking trail, and Cliff House restaurant. Let me know if you would like me to modify the evening itinerary further.

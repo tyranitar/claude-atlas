@@ -1,0 +1,46 @@
+-- Detailed Itinerary Morning
+
+
+<prompt>
+"""
+Constraints: 
+- I'm visiting <city_name> San Francisco </city_name>.  
+- Exclude <main_quest> Golden Gate Park </main_quest>.
+- Locations cannot be more than 30 minutes away from <main_quest> Golden Gate Park </main_quest>.
+- Start at 9am and end at 12:30pm. 
+- Stay at each location for 90 minutes.
+- Leave a 30 minutes gap between locations for travel time.
+- Keep locations within 5km of each other.
+
+
+Design an itinerary around the constraints, in the following format:
+<response>
+[ 
+    { "location_name": "XXX", 
+    "location_address": "XXX", 
+    "latitude": "XXX.XXXXXXX",  
+    "longtitude": "XXX.XXXXXXX",
+    "start_time": "XX:XX",  
+    "end_time": "XX:XX", 
+    } 
+], ... ,
+[ 
+    { "location_name": "XXX", 
+    "location_address": "XXX", 
+    "latitude": "XXX.XXXXXXX",  
+    "longtitude": "XXX.XXXXXXX", 
+    "start_time": "XX:XX",  
+    "end_time": "XX:XX", 
+    } 
+]
+</response>
+
+"""
+</prompt>
+
+-- Example output:
+
+Here is a suggested itinerary for your day in San Francisco:
+
+<response> [ { "location_name": "Fisherman's Wharf", "location_address": "2850 Taylor St, San Francisco, CA 94133", "start_time": {"09:00"}, "end_time": {"10:00"} }, { "location_name": "Lombard Street", "location_address": "Lombard St, San Francisco, CA 94123", "start_time": {"10:30"}, "end_time": {"11:30"} }, { "location_name": "Pier 39", "location_address": "Beach St &, The Embarcadero, San Francisco, CA 94133", "start_time": {"12:00"}, "end_time": {"12:30"} } ] </response>
+I excluded Golden Gate Park per your request, and selected popular tourist destinations within 5km of each other that can be seen within an hour. I left 30 minutes of travel time between locations and started at 9am, ending before 12:30pm. Please let me know if you would like me to modify the itinerary in any way!
