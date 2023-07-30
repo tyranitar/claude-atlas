@@ -3,30 +3,140 @@
 
 <prompt>
 """
-The following is the itinerary for the day:
+Constraints:
+- Regenerate itinerary that is shared as an input using the above constraints, while keeping the format of the itinerary output.
+- Take care to wrap ALL outputs with <response>[{}, {}, {}, {}, {}]</response>. Do not include outside text.
+- Utilize user input as instructions to edit the data. Example: "Replace the 9am and 4pm locations, but keep the 730pm one." => replace the events with start_time at 9am and 4pm with brand new locations.
+- If new location added to replace an existing event has start_time before 13:00, it has to be within 30 minutes walking distance of location with start_time at 13:00 and within 15 minutes walking distance of the location preceding it.
+- If new location added to replace an existing event has start_time after 16:30, it has to be more than 5km away from all locations with start_time before 13:00 and within 15 minutes walking distance of the location preceding it.
+- Do not alter data if the user did not request a change. Keep them the same.
+### 
+Input: 
+<user_input>Replace the 11am and 6pm locations</user_input>
+[ 
+{ "name": "Exploratorium", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30" },
 
-[ { "name": "California Academy of Sciences", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30" }, 
-  { "name": "Japanese Tea Garden", "latitude": 37.770383, "longitude": -122.4701793, "start_time": "11:00", "end_time": "12:30" }, 
-  { "name": "Golden Gate Park", "latitude": 37.7694208, "longitude": -122.4862138, "start_time": "13:00", "end_time": "16:00" }, 
-  { "name": "Pier 39", "latitude": 37.80867300000001, "longitude": -122.409821, "start_time": "16:30", "end_time": "17:30" }, 
-  { "name": "Lombard Street", "latitude": 37.8020074, "longitude": -122.4195532, "start_time": "18:00", "end_time": "19:00" }, 
-  { "name": "Fisherman's Wharf", "latitude": 37.8085771, "longitude": -122.4125282, "start_time": "19:30", "end_time": "20:30" } 
+{ "name": "Ferry Building Marketplace", "latitude": 37.770383, "longitude": -122.4701793, "start_time": "11:00", "end_time": "12:30" },
+
+{ "name": "Golden Gate Park", "latitude": 37.7694208, "longitude": -122.4862138, "start_time": "13:00", "end_time": "16:00" },
+
+{ "name": "Mission Dolores Park", "latitude": 37.80867300000001, "longitude": -122.409821, "start_time": "16:30", "end_time": "17:30" },
+
+{ "name": "Castro Street", "latitude": 37.8020074, "longitude": -122.4195532, "start_time": "18:00", "end_time": "19:00" },
+
+{ "name": "Corona Heights Park", "latitude": 37.8085771, "longitude": -122.4125282, "start_time": "19:30", "end_time": "20:30" }
+]
+Output:
+<response>
+[
+{ "name": "Exploratorium", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30" },
+
+{ "name": "Pier 39", "latitude": 37.8086731, "longitude": -122.4098211, "start_time": "11:00", "end_time": "12:30" },
+
+{ "name": "Golden Gate Park", "latitude": 37.7694208, "longitude": -122.4862138, "start_time": "13:00", "end_time": "16:00" },
+
+{ "name": "Mission Dolores Park", "latitude": 37.80867300000001, "longitude": -122.409821, "start_time": "16:30", "end_time": "17:30" },
+
+{ "name": "The Painted Ladies", "latitude": 37.7762692, "longitude": -122.4325256, "start_time": "18:00", "end_time": "19:00" },
+
+{ "name": "Corona Heights Park", "latitude": 37.8085771, "longitude": -122.4125282, "start_time": "19:30", "end_time": "20:30" }
+]
+</response>
+
+###
+Input:
+<user_input>Replace the 1130am and 4pm locations</user_input>
+
+[
+
+{ "name": "The Getty Center", "latitude": 34.0780361, "longitude": -118.4740951, "start_time": "10:00", "end_time": "11:00" },
+
+{ "name": "Griffith Observatory", "latitude": 34.1184341, "longitude": -118.3003935, "start_time": "11:30", "end_time": "13:00" },
+
+{ "name": "The Broad Museum", "latitude": 34.0543942, "longitude": -118.2505867, "start_time": "13:30", "end_time": "15:00" },
+
+{ "name": "Hollywood Sign", "latitude": 34.1341151, "longitude": -118.3215482, "start_time": "16:00", "end_time": "17:00" },
+
+{ "name": "Universal Studios Hollywood", "latitude": 34.1381178, "longitude": -118.3533783, "start_time": "17:30", "end_time": "19:00" },
+
+{ "name": "Santa Monica Pier", "latitude": 34.0103472, "longitude": -118.4962278, "start_time": "19:30", "end_time": "21:00" }
+
 ]
 
-Constraints:
+Output:
+<response>
+[
+{ "name": "The Getty Center", "latitude": 34.0780361, "longitude": -118.4740951, "start_time": "10:00", "end_time": "11:00" },
 
-- <user_input>"Replace the 11am location. Replace the 430pm location. Keep all other locations."</user_input>
+{ "name": "Los Angeles County Museum of Art", "latitude": 34.0639323, "longitude": -118.3592293, "start_time": "11:30", "end_time": "13:00" },
 
-- New location added to replace an existing location has to have the same start_time and end_time as the location it is replacing.
+{ "name": "The Broad Museum", "latitude": 34.0543942, "longitude": -118.2505867, "start_time": "13:30", "end_time": "15:00" },
 
-- If new location added to replace an existing location has start_time before 13:00, it has to be within 15 minutes walking distance of location with start_time at 13:00 and within 15 minutes walking distance of the location immediately preceding it.
+{ "name": "Rodeo Drive", "latitude": 34.0696502, "longitude": -118.4052965, "start_time": "16:00", "end_time": "17:00" },
 
-- If new location added to replace an existing location has start_time after 16:30, it has to be within 15 minutes walking distance of the location immediately preceding it but more than 5km away from the location with start_time before 10:30.
+{ "name": "Universal Studios Hollywood", "latitude": 34.1381178, "longitude": -118.3533783, "start_time": "17:30", "end_time": "19:00" },
 
-Regenerate itinerary using the above constraints, while keeping the format of the itinerary output.
+{ "name": "Santa Monica Pier", "latitude": 34.0103472, "longitude": -118.4962278, "start_time": "19:30", "end_time": "21:00" }
 
-Delete all text outside of <response></response> tags.
+]
+</response>
 
+###
+Input:
+<user_input>Replace the 1030am and 630pm locations</user_input>
+
+[
+
+{ "name": "National Mall", "latitude": 38.8896202, "longitude": -77.0229773, "start_time": "09:00", "end_time": "10:00" },
+
+{ "name": "Smithsonian National Air and Space Museum", "latitude": 38.8881597, "longitude": -77.0198679, "start_time": "10:30", "end_time": "12:00" },
+
+{ "name": "White House", "latitude": 38.8976763, "longitude": -77.0365298, "start_time": "13:00", "end_time": "14:00" },
+
+{ "name": "Lincoln Memorial", "latitude": 38.889293, "longitude": -77.050138, "start_time": "15:00", "end_time": "16:00" },
+
+{ "name": "Washington Monument", "latitude": 38.889484, "longitude": -77.035278, "start_time": "17:00", "end_time": "18:00" },
+
+{ "name": "Thomas Jefferson Memorial", "latitude": 38.8813958, "longitude": -77.0365706, "start_time": "18:30", "end_time": "19:30" }
+
+]
+
+Output:
+<response>
+[
+{ "name": "National Mall", "latitude": 38.8896202, "longitude": -77.0229773, "start_time": "09:00", "end_time": "10:00" },
+
+{ "name": "United States Capitol", "latitude": 38.889939, "longitude": -77.009051, "start_time": "10:30", "end_time": "12:00" },
+
+{ "name": "White House", "latitude": 38.8976763, "longitude": -77.0365298, "start_time": "13:00", "end_time": "14:00" },
+
+{ "name": "Lincoln Memorial", "latitude": 38.889293, "longitude": -77.050138, "start_time": "15:00", "end_time": "16:00" },
+
+{ "name": "Washington Monument", "latitude": 38.889484, "longitude": -77.035278, "start_time": "17:00", "end_time": "18:00" },
+
+{ "name": "National Gallery of Art", "latitude": 38.891298, "longitude": -77.019965, "start_time": "18:30", "end_time": "19:30" }
+
+]
+</response>
+
+###
+Input:
+<user_input>Replace the 9am and 730pm locations</user_input>
+[ 
+{ "name": "Exploratorium", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30" },
+
+{ "name": "Ferry Building Marketplace", "latitude": 37.770383, "longitude": -122.4701793, "start_time": "11:00", "end_time": "12:30" },
+
+{ "name": "Golden Gate Park", "latitude": 37.7694208, "longitude": -122.4862138, "start_time": "13:00", "end_time": "16:00" },
+
+{ "name": "Mission Dolores Park", "latitude": 37.80867300000001, "longitude": -122.409821, "start_time": "16:30", "end_time": "17:30" },
+
+{ "name": "Castro Street", "latitude": 37.8020074, "longitude": -122.4195532, "start_time": "18:00", "end_time": "19:00" },
+
+{ "name": "Corona Heights Park", "latitude": 37.8085771, "longitude": -122.4125282, "start_time": "19:30", "end_time": "20:30" }
+]
+
+Output:
 """
 </prompt>
 
