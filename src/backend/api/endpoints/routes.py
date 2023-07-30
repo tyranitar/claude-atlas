@@ -26,7 +26,7 @@ def quests(request: ItineraryRequest) -> ItineraryResponse:
 
 
 @router.post("/chat/")
-async def chat(request: ChatRequest) -> ItineraryResponse:
+def chat(request: ChatRequest) -> ItineraryResponse:
     raw_resp = agent.regenerate_itinerary(request=request)
     resp = formatter.format_regenerate_itinerary(response=raw_resp, city=request.city)
     print("raw resp...")

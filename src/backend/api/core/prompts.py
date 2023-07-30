@@ -4,9 +4,9 @@ class Prompts:
    Suggest 3 different tourist highlights for <city> {location} </city>, which are at least 5km apart, in the following format:
    <response>
       [
-         {{location: "XXX", fun_facts: [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}},
-         {{location: "XXX", fun_facts: [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}},
-         {{location: "XXX", fun_facts: [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}}
+         {{"location": "XXX", "fun_facts": [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}},
+         {{"location": "XXX", "fun_facts": [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}},
+         {{"location": "XXX", "fun_facts": [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}}
       ]
    </response>
    Delete text outside of the <response></response> tags.
