@@ -1,0 +1,29 @@
+.QuestCard {
+  box-shadow: 0 2px 2px lightgray;
+  overflow: hidden;
+
+  :global .ant-card-body {
+    // padding: 4px;
+
+    // background: linear-gradient(135deg, lightblue, pink);
+
+    // & > :not(:first-child) {
+    //   margin-top: 4px;
+    // }
+  }
+
+  .image {
+    // border-radius: 8px;
+    overflow: hidden;
+
+    width: 400px;
+    height: 250px;
+  }
+
+  // .description {
+  //   background-color: white;
+  //   border-radius: 8px;
+
+  //   // padding: 4px 8px;
+  // }
+}

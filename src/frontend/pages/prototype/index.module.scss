@@ -1,0 +1,31 @@
+.PrototypePage {
+  // display: flex;
+  padding-top: 128px;
+
+  & > :not(:first-child) {
+    margin-top: 64px;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 48px;
+    font-weight: bold;
+  }
+
+  .quests {
+    display: flex;
+
+    & > :not(:first-child) {
+      margin-left: 12px;
+    }
+
+    .card-content {
+      & > :not(:first-child) {
+        margin-top: 8px;
+      }
+    }
+  }
+}
