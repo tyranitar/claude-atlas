@@ -37,7 +37,7 @@ SCOPES = [
 class AgentEngine:
     def __init__(self, formatter: Formatter):
         self.llm = ChatAnthropic(
-            max_tokens_to_sample=10000,
+            max_tokens_to_sample=1024,
             temperature=0
         )
         self.prompts = Prompts()

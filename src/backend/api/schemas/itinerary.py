@@ -13,7 +13,6 @@ class ItineraryBlock(BaseModel):
 class ItineraryRequest(BaseModel):
     city: str
     quest: str
-    context: Optional[str]
 
 class ItineraryResponse(BaseModel):
     response: List[ItineraryBlock]
