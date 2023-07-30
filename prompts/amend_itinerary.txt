@@ -32,6 +32,12 @@ Delete all text outside of <response></response> tags.
 """
 </prompt>
 
+
+
+
+------------------------------------------------------------------------------------
+
+
 -- Example output #1:
 
 <response>
@@ -39,6 +45,8 @@ Delete all text outside of <response></response> tags.
 
 </response>
 
+
+------------------------------------------------------------------------------------
 
 -- Example input #2:
 The following is the itinerary for the day:

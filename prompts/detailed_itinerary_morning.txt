@@ -37,6 +37,9 @@ Delete text outside of the <response></response> tags.
 """
 </prompt>
 
+
+------------------------------------------------------------------------------------
+
 -- Example output #1:
 
 <response> [ { "location_name": "Japanese Tea Garden", "location_address": "75 Hagiwara Tea Garden Dr, San Francisco, CA 94118", "start_time": "09:00", "end_time": "10:30" }, { "location_name": "California Academy of Sciences", "location_address": "55 Music Concourse Dr, San Francisco, CA 94118", "start_time": "11:00", "end_time": "12:30" } ] </response>
