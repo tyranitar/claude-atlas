@@ -22,6 +22,15 @@ export ANTHROPIC_API_KEY=<MY_API_KEY>
 # Running the backend application
 poetry run -vvv uvicorn main:app --reload
 
-# Example CURL Response
-curl -d '{"location":"San Francisco"}' -H "Content-Type: application/json" -X POST http://localhost:8000/predict/
+# Example CURL requests
+# /quests
+curl -d '{"location":"San Francisco"}' -H "Content-Type: application/json" -X POST http://localhost:8000/quests/
+
+curl -d '{"location":"San Francisco", "rejected_options": ["Golden Gate Bridge", "Golden Gate Park"]}' -H "Content-Type: application/json" -X POST http://localhost:8000/quests/
+
+# /itineraries
+<TODO>
+
+# /chat
+<TODO>
 ```
