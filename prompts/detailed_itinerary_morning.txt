@@ -7,7 +7,7 @@ Constraints:
 - I'm visiting <city_name> San Francisco </city_name>.  
 - Exclude <main_quest> Golden Gate Park </main_quest>.
 - Include locations within 30 minutes of <main_quest> Golden Gate Park </main_quest>.
-- Keep locations within 5km of each other.
+- Keep locations within 3km of each other.
 - The first location start_time should be 09:00 and the last location end_time should not exceed 12:30 of the same day.
 - Stay at each location for 90 minutes.
 - Leave a 30 minutes gap between locations for travel time.
@@ -37,6 +37,39 @@ Delete text outside of the <response></response> tags.
 """
 </prompt>
 
--- Example output:
+-- Example output #1:
 
 <response> [ { "location_name": "Japanese Tea Garden", "location_address": "75 Hagiwara Tea Garden Dr, San Francisco, CA 94118", "start_time": "09:00", "end_time": "10:30" }, { "location_name": "California Academy of Sciences", "location_address": "55 Music Concourse Dr, San Francisco, CA 94118", "start_time": "11:00", "end_time": "12:30" } ] </response>
+
+
+-- Example output #2:
+<response>
+[
+
+{
+
+"location_name": "Exploratorium",
+
+"location_address": "Pier 15, Embarcadero, San Francisco, CA 94111",
+
+"start_time": "09:00",
+
+"end_time": "10:30"
+
+},
+
+{
+
+"location_name": "Ferry Building Marketplace",
+
+"location_address": "1 Ferry Building, San Francisco, CA 94111",
+
+"start_time": "11:00",
+
+"end_time": "12:30"
+
+}
+
+]
+
+</response>

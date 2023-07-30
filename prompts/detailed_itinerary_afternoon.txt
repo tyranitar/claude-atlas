@@ -7,7 +7,7 @@ Constraints:
 - I'm visiting <city_name> San Francisco </city_name>.  
 - Exclude <main_quest> Golden Gate Park </main_quest>.
 - Exclude locations within 5km of the following: <morning_itinerary>[ { "location_name": "Fisherman's Wharf", "location_address": "2850 Taylor St, San Francisco, CA 94133", "start_time": {"09:00"}, "end_time": {"10:00"} }, { "location_name": "Lombard Street", "location_address": "Lombard St, San Francisco, CA 94123", "start_time": {"10:30"}, "end_time": {"11:30"} }, { "location_name": "Pier 39", "location_address": "Beach St &, The Embarcadero, San Francisco, CA 94133", "start_time": {"12:00"}, "end_time": {"12:30"} } ]</morning_itinerary>
-- Keep locations within 5km of each other.
+- Keep locations within 3km of each other.
 - The first location start_time should be 16:30 and the last location end_time should not exceed 21:00 of the same day.  
 - Stay at each location for 60 minutes.
 - Leave a 30 minutes gap between locations for travel time.
@@ -36,6 +36,51 @@ Delete text outside of the <response></response> tags.
 """
 </prompt>
 
--- Example output:
+-- Example output #1:
 
 <response> [ { "location_name": "Palace of Fine Arts", "location_address": "3301 Lyon St, San Francisco, CA 94123", "start_time": "16:30", "end_time": "17:30" }, { "location_name": "Exploratorium", "location_address": "Pier 15, Embarcadero at Green St, San Francisco, CA 94111", "start_time": "18:00", "end_time": "19:00" }, { "location_name": "AT&T Park", "location_address": "24 Willie Mays Plaza, San Francisco, CA 94107", "start_time": "19:30", "end_time": "20:30" } ] </response>
+
+
+-- Example output #2:
+<response>
+[
+
+{
+
+"location_name": "Mission Dolores Park",
+
+"location_address": "Dolores St &, 19th St, San Francisco, CA 94114",
+
+"start_time": "16:30",
+
+"end_time": "17:30"
+
+},
+
+{
+
+"location_name": "Castro Street",
+
+"location_address": "Castro St, San Francisco, CA 94114",
+
+"start_time": "18:00",
+
+"end_time": "19:00"
+
+},
+
+{
+
+"location_name": "Corona Heights Park",
+
+"location_address": "Roosevelt Way, San Francisco, CA 94114",
+
+"start_time": "19:30",
+
+"end_time": "20:30"
+
+}
+
+]
+
+</response>

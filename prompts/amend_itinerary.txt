@@ -1,0 +1,77 @@
+-- Amend Itinerary
+
+
+<prompt>
+"""
+The following is the itinerary for the day:
+
+<response>
+[ { "name": "California Academy of Sciences", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30" }, 
+  { "name": "Japanese Tea Garden", "latitude": 37.770383, "longitude": -122.4701793, "start_time": "11:00", "end_time": "12:30" }, 
+  { "name": "Golden Gate Park", "latitude": 37.7694208, "longitude": -122.4862138, "start_time": "13:00", "end_time": "16:00" }, 
+  { "name": "Pier 39", "latitude": 37.80867300000001, "longitude": -122.409821, "start_time": "16:30", "end_time": "17:30" }, 
+  { "name": "Lombard Street", "latitude": 37.8020074, "longitude": -122.4195532, "start_time": "18:00", "end_time": "19:00" }, 
+  { "name": "Fisherman's Wharf", "latitude": 37.8085771, "longitude": -122.4125282, "start_time": "19:30", "end_time": "20:30" } 
+]
+
+</response>
+Constraints:
+
+- <user_input>"Replace the 11am location. Replace the 430pm location. Keep all other locations."</user_input>
+
+- New location added to replace an existing location has to have the same start_time and end_time as the location it is replacing.
+
+- If new location added to replace an existing location has start_time before 13:00, it has to be within 15 minutes walking distance of location with start_time at 13:00 and within 15 minutes walking distance of the location immediately preceding it.
+
+- If new location added to replace an existing location has start_time after 16:30, it has to be within 15 minutes walking distance of the location immediately preceding it but more than 5km away from the location with start_time before 10:30.
+
+Regenerate itinerary using the above constraints, while keeping the format of the itinerary output.
+
+Delete all text outside of <response></response> tags.
+
+"""
+</prompt>
+
+-- Example output #1:
+
+<response>
+[ { "name": "California Academy of Sciences", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30" }, { "name": "De Young Museum", "latitude": 37.770761, "longitude": -122.467989, "start_time": "11:00", "end_time": "12:30" }, { "name": "Golden Gate Park", "latitude": 37.7694208, "longitude": -122.4862138, "start_time": "13:00", "end_time": "16:00" }, { "name": "Chinatown", "latitude": 37.7949123, "longitude": -122.4070558, "start_time": "16:30", "end_time": "17:30" }, { "name": "Lombard Street", "latitude": 37.8020074, "longitude": -122.4195532, "start_time": "18:00", "end_time": "19:00" }, { "name": "Fisherman's Wharf", "latitude": 37.8085771, "longitude": -122.4125282, "start_time": "19:30", "end_time": "20:30" } ]
+
+</response>
+
+
+-- Example input #2:
+The following is the itinerary for the day:
+
+<response>
+[ { "name": "Exploratorium", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30" },
+
+{ "name": "Ferry Building Marketplace", "latitude": 37.770383, "longitude": -122.4701793, "start_time": "11:00", "end_time": "12:30" },
+
+{ "name": "Golden Gate Park", "latitude": 37.7694208, "longitude": -122.4862138, "start_time": "13:00", "end_time": "16:00" },
+
+{ "name": "Mission Dolores Park", "latitude": 37.80867300000001, "longitude": -122.409821, "start_time": "16:30", "end_time": "17:30" },
+
+{ "name": "Castro Street", "latitude": 37.8020074, "longitude": -122.4195532, "start_time": "18:00", "end_time": "19:00" },
+
+{ "name": "Corona Heights Park", "latitude": 37.8085771, "longitude": -122.4125282, "start_time": "19:30", "end_time": "20:30" }
+
+]
+
+</response>
+Constraints:
+
+"Replace the 11am and 6pm locations, but keep the 730pm one."
+If new location added to replace an existing event has start_time before 13:00, it has to be within 15 minutes walking distance of location with start_time at 13:00 and within 15 minutes walking distance of the location preceding it.
+If new location added to replace an existing event has start_time after 16:30, it has to be more than 5km away from all locations with start_time before 13:00 and within 15 minutes walking distance of the location preceding it.
+Regenerate itinerary using the above constraints, while keeping the format of the itinerary output.
+
+Delete all text outside of <response></response> tags.
+
+
+
+-- Example output #2: 
+<response>
+[{"name": "Exploratorium", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30"}, {"name": "Palace of Fine Arts", "latitude": 37.802379, "longitude": -122.44982, "start_time": "11:00", "end_time": "12:30"}, {"name": "Golden Gate Park", "latitude": 37.7694208, "longitude": -122.4862138, "start_time": "13:00", "end_time": "16:00"}, {"name": "Fort Mason Center", "latitude": 37.808528, "longitude": -122.433487, "start_time": "16:30", "end_time": "17:30"}, {"name": "Castro Street", "latitude": 37.8020074, "longitude": -122.4195532, "start_time": "18:00", "end_time": "19:00"}, {"name": "Corona Heights Park", "latitude": 37.8085771, "longitude": -122.4125282, "start_time": "19:30", "end_time": "20:30"} ]
+
+</response>
