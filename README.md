@@ -24,12 +24,12 @@ poetry run -vvv uvicorn main:app --reload
 
 # Example CURL requests
 # /quests
-curl -d '{"location":"San Francisco"}' -H "Content-Type: application/json" -X POST http://localhost:8000/quests/
+curl -d '{"city":"San Francisco"}' -H "Content-Type: application/json" -X POST http://localhost:8000/quests/
 
-curl -d '{"location":"San Francisco", "rejected_options": ["Golden Gate Bridge", "Golden Gate Park"]}' -H "Content-Type: application/json" -X POST http://localhost:8000/quests/
+curl -d '{"city":"San Francisco", "rejected_options": ["Golden Gate Bridge", "Golden Gate Park"]}' -H "Content-Type: application/json" -X POST http://localhost:8000/quests/
 
-# /itineraries
-<TODO>
+# /itinerary
+curl -d '{"city":"San Francisco", "quest": "Golden Gate Park"}' -H "Content-Type: application/json" -X POST http://localhost:8000/itinerary/
 
 # /chat
 <TODO>

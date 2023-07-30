@@ -21,6 +21,7 @@ uvicorn = {extras = ["standard"], version = "^0.23.1"}
 anthropic = "^0.3.6"
 bs4 = "^0.0.1"
 lxml = "^4.9.3"
+googlemaps = "^4.10.0"
 
 [tool.black]
 skip-string-normalization = true

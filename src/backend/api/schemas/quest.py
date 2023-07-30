@@ -8,7 +8,7 @@ class Quest(BaseModel):
     fun_facts: List[str]
 
 class QuestRequest(BaseModel):
-    location: Optional[str] = None
+    city: Optional[str] = None
     rejected_options: Optional[List[str]] = None
 
 class QuestResponse(BaseModel):

@@ -661,6 +661,19 @@ files = [
 gitdb = ">=4.0.1,<5"
 
 [[package]]
+name = "googlemaps"
+version = "4.10.0"
+description = "Python client library for Google Maps Platform"
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "googlemaps-4.10.0.tar.gz", hash = "sha256:3055fcbb1aa262a9159b589b5e6af762b10e80634ae11c59495bd44867e47d88"},
+]
+
+[package.dependencies]
+requests = ">=2.20.0,<3.0"
+
+[[package]]
 name = "gptcache"
 version = "0.1.37"
 description = "GPTCache, a powerful caching library that can be used to speed up and lower the cost of chat applications that rely on the LLM service. GPTCache works as a memcache for AIGC applications, similar to how Redis works for traditional applications."
@@ -3353,4 +3366,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">3.9.7,<4.0"
-content-hash = "e306363ec902a3f5c9b10db30e0d71888aab10bac6edaf9ea5bf58fb6af6d7d3"
+content-hash = "4e2484bb7df5eeb6747f8bd2a59fde404366d002ec784f66deedc2af1d24efd4"

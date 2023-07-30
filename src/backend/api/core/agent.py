@@ -1,12 +1,9 @@
-from typing import Any, List
-
-import time
-import asyncio
-
+import langchain
 from langchain.chat_models import ChatAnthropic
-from langchain.prompts import PromptTemplate
-from langchain.chains import ConversationChain, LLMChain
+from langchain.cache import InMemoryCache
+from langchain.chains import ConversationChain, LLMChain, SequentialChain
 from langchain.memory import ConversationBufferMemory
+from langchain.prompts import PromptTemplate
 from langchain.prompts.chat import (
     ChatPromptTemplate,
     MessagesPlaceholder,
@@ -20,33 +17,15 @@ from api.schemas.quest import QuestRequest
 from api.schemas.chat import ChatRequest
 from api.core.prompts import Prompts
 
+
+langchain.llm_cache = InMemoryCache()
+
 class AgentEngine:
     def __init__(self):
         self.llm = ChatAnthropic()
         self.prompts = Prompts()
 
-    async def generate_responses(self, request: QuestRequest) -> List[str]:
-        s = time.perf_counter()
-        responses = await self.generate_concurrently(request=request)
-        elapsed = time.perf_counter() - s
-        print("\033[1m" + f"Concurrent executed in {elapsed:0.2f} seconds." + "\033[0m")
-
-        return responses
-
-    async def _async_generate(self, chain: LLMChain, request: QuestRequest) -> str:
-        return await chain.arun(location=request.location)
-
-    async def generate_concurrently(self, request: QuestRequest) -> List[str]:
-        prompt = self._itinerary_prompt(request=request)
-        itinerary_chain = LLMChain(llm=self.llm, prompt=prompt)
-        travel_chains = [itinerary_chain]
-
-        tasks = [
-            self._async_generate(chain=chain, request=request) for chain in travel_chains
-        ]
-        return await asyncio.gather(*tasks)
-
-    def generate_quests(self, request: QuestRequest) -> List[str]:
+    def generate_quests(self, request: QuestRequest) -> str:
         prompts = Prompts()
         template = prompts.POPULAR_LOCATIONS_PROMPT
         if request.rejected_options:
@@ -59,23 +38,26 @@ class AgentEngine:
             template=template,
         )
         chain = LLMChain(llm=self.llm, prompt=prompt)
-        response = chain.run(location=request.location)
+        response = chain.run(location=request.city)
 
         return response
 
-    @staticmethod
-    def generate_itinerary(request: ItineraryRequest) -> PromptTemplate:
+    def generate_itinerary(self, request: ItineraryRequest) -> dict:
         prompts = Prompts()
-        # Default: Retrieve 3 popular destinations with fun facts
-        template = prompts.POPULAR_LOCATIONS_PROMPT
-
-        if request.context:
-            template = prompts.CONTEXT_PROMPT_PREFIX + request.context
-        prompt = PromptTemplate(
-            input_variables=["location"],
-            template=template,
+        prompt_template = PromptTemplate(input_variables=["city", "quest"], template=prompts.ITINERARY_MORNING_PROMPT)
+        morning_itinerary_chain = LLMChain(llm=self.llm, prompt=prompt_template, output_key="morning_itinerary")
+        prompt_template = PromptTemplate(input_variables=["quest"], template=prompts.ITINERARY_MAIN_PROMPT)
+        main_quest_itinerary_chain = LLMChain(llm=self.llm, prompt=prompt_template, output_key="main_quest_itinerary")
+        prompt_template = PromptTemplate(input_variables=["city", "quest", "morning_itinerary"], template=prompts.ITINERARY_AFTERNOON_PROMPT)
+        afternoon_itinerary_chain = LLMChain(llm=self.llm, prompt=prompt_template, output_key="afternoon_itinerary")
+        overall_chain = SequentialChain(
+            chains=[morning_itinerary_chain, main_quest_itinerary_chain, afternoon_itinerary_chain],
+            input_variables=["city", "quest"],
+            output_variables=["morning_itinerary", "main_quest_itinerary", "afternoon_itinerary"],
         )
-        return prompt
+        response = overall_chain({"city": request.city, "quest": request.quest})
+
+        return response
 
     def compute_chat_response(self, request: ChatRequest) -> str:
         """
