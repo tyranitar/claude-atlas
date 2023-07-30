@@ -108,71 +108,71 @@ class Prompts:
    - Do not alter data if the user did not request a change. Keep them the same.
    ###
    Input:
-   <user_input>Replace the 11am and 6pm locations</user_input>
+   <user_input>"Replace the 11:00 and 18:00 locations"</user_input>
    [ 
-   {{ "name": "Exploratorium", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30" }},
+   {{ "name": "Exploratorium", "start_time": "09:00", "end_time": "10:30" }},
 
-   {{ "name": "Ferry Building Marketplace", "latitude": 37.770383, "longitude": -122.4701793, "start_time": "11:00", "end_time": "12:30" }},
+   {{ "name": "Ferry Building Marketplace", "start_time": "11:00", "end_time": "12:30" }},
 
-   {{ "name": "Golden Gate Park", "latitude": 37.7694208, "longitude": -122.4862138, "start_time": "13:00", "end_time": "16:00" }},
+   {{ "name": "Golden Gate Park", "start_time": "13:00", "end_time": "16:00" }},
 
-   {{ "name": "Mission Dolores Park", "latitude": 37.80867300000001, "longitude": -122.409821, "start_time": "16:30", "end_time": "17:30" }},
+   {{ "name": "Mission Dolores Park", "start_time": "16:30", "end_time": "17:30" }},
 
-   {{ "name": "Castro Street", "latitude": 37.8020074, "longitude": -122.4195532, "start_time": "18:00", "end_time": "19:00" }},
+   {{ "name": "Castro Street", "start_time": "18:00", "end_time": "19:00" }},
 
-   {{ "name": "Corona Heights Park", "latitude": 37.8085771, "longitude": -122.4125282, "start_time": "19:30", "end_time": "20:30" }}
+   {{ "name": "Corona Heights Park", "start_time": "19:30", "end_time": "20:30" }}
    ]
    Output:
    <response>
    [
-   {{ "name": "Exploratorium", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30" }},
+   {{ "name": "Exploratorium", "start_time": "09:00", "end_time": "10:30" }},
 
-   {{ "name": "Pier 39", "latitude": 37.8086731, "longitude": -122.4098211, "start_time": "11:00", "end_time": "12:30" }},
+   {{ "name": "Pier 39", "start_time": "11:00", "end_time": "12:30" }},
 
-   {{ "name": "Golden Gate Park", "latitude": 37.7694208, "longitude": -122.4862138, "start_time": "13:00", "end_time": "16:00" }},
+   {{ "name": "Golden Gate Park", "start_time": "13:00", "end_time": "16:00" }},
 
-   {{ "name": "Mission Dolores Park", "latitude": 37.80867300000001, "longitude": -122.409821, "start_time": "16:30", "end_time": "17:30" }},
+   {{ "name": "Mission Dolores Park", "start_time": "16:30", "end_time": "17:30" }},
 
-   {{ "name": "The Painted Ladies", "latitude": 37.7762692, "longitude": -122.4325256, "start_time": "18:00", "end_time": "19:00" }},
+   {{ "name": "The Painted Ladies", "start_time": "18:00", "end_time": "19:00" }},
 
-   {{ "name": "Corona Heights Park", "latitude": 37.8085771, "longitude": -122.4125282, "start_time": "19:30", "end_time": "20:30" }}
+   {{ "name": "Corona Heights Park", "start_time": "19:30", "end_time": "20:30" }}
    ]
    </response>
 
    ###
    Input:
-   <user_input>Change the Griffith Observatory location.</user_input>
+   <user_input>"Change the Griffith Observatory location."</user_input>
 
    [
 
-   {{ "name": "The Getty Center", "latitude": 34.0780361, "longitude": -118.4740951, "start_time": "10:00", "end_time": "11:00" }},
+   {{ "name": "The Getty Center", "start_time": "10:00", "end_time": "11:00" }},
 
-   {{ "name": "Griffith Observatory", "latitude": 34.1184341, "longitude": -118.3003935, "start_time": "11:30", "end_time": "13:00" }},
+   {{ "name": "Griffith Observatory", "start_time": "11:30", "end_time": "13:00" }},
 
-   {{ "name": "The Broad Museum", "latitude": 34.0543942, "longitude": -118.2505867, "start_time": "13:30", "end_time": "15:00" }},
+   {{ "name": "The Broad Museum", "start_time": "13:30", "end_time": "15:00" }},
 
-   {{ "name": "Hollywood Sign", "latitude": 34.1341151, "longitude": -118.3215482, "start_time": "16:00", "end_time": "17:00" }},
+   {{ "name": "Hollywood Sign", "start_time": "16:00", "end_time": "17:00" }},
 
-   {{ "name": "Universal Studios Hollywood", "latitude": 34.1381178, "longitude": -118.3533783, "start_time": "17:30", "end_time": "19:00" }},
+   {{ "name": "Universal Studios Hollywood", "start_time": "17:30", "end_time": "19:00" }},
 
-   {{ "name": "Santa Monica Pier", "latitude": 34.0103472, "longitude": -118.4962278, "start_time": "19:30", "end_time": "21:00" }}
+   {{ "name": "Santa Monica Pier", "start_time": "19:30", "end_time": "21:00" }}
 
    ]
 
    Output:
    <response>
    [
-   {{ "name": "The Getty Center", "latitude": 34.0780361, "longitude": -118.4740951, "start_time": "10:00", "end_time": "11:00" }},
+   {{ "name": "The Getty Center", "start_time": "10:00", "end_time": "11:00" }},
 
-   {{ "name": "Los Angeles County Museum of Art", "latitude": 34.0639323, "longitude": -118.3592293, "start_time": "11:30", "end_time": "13:00" }},
+   {{ "name": "Los Angeles County Museum of Art", "start_time": "11:30", "end_time": "13:00" }},
 
-   {{ "name": "The Broad Museum", "latitude": 34.0543942, "longitude": -118.2505867, "start_time": "13:30", "end_time": "15:00" }},
+   {{ "name": "The Broad Museum", "start_time": "13:30", "end_time": "15:00" }},
 
-   {{ "name": "Hollywood Sign", "latitude": 34.1341151, "longitude": -118.3215482, "start_time": "16:00", "end_time": "17:00" }},
+   {{ "name": "Hollywood Sign", "start_time": "16:00", "end_time": "17:00" }},
 
-   {{ "name": "Universal Studios Hollywood", "latitude": 34.1381178, "longitude": -118.3533783, "start_time": "17:30", "end_time": "19:00" }},
+   {{ "name": "Universal Studios Hollywood", "start_time": "17:30", "end_time": "19:00" }},
 
-   {{ "name": "Santa Monica Pier", "latitude": 34.0103472, "longitude": -118.4962278, "start_time": "19:30", "end_time": "21:00" }}
+   {{ "name": "Santa Monica Pier", "start_time": "19:30", "end_time": "21:00" }}
 
    ]
    </response>
