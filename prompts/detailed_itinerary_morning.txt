@@ -8,7 +8,7 @@ Constraints:
 - Exclude <main_quest> Golden Gate Park </main_quest>.
 - Include locations within 30 minutes of <main_quest> Golden Gate Park </main_quest>.
 - Keep locations within 5km of each other.
-- Start at 9am and end at 12:30pm. 
+- The first event should start at 9am and the last event should end by 12:30pm. 
 - Stay at each location for 90 minutes.
 - Leave a 30 minutes gap between locations for travel time.
 
