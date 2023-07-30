@@ -1,13 +1,15 @@
 class Prompts:
    CONTEXT_PROMPT_PREFIX = "I am traveling to {location}. Generate a 1-day itinerary for me based on the following context:\n"
    POPULAR_LOCATIONS_PROMPT = """
-   Can you suggest me 3 different tourist highlights for <city> {location} </city>, which are at least 5km apart?
-   Example of output (including tags):
-   [
-   {{"location": "Singapore Zoo", "fun_facts": [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}},
-   {{"location": "Sentosa", "fun_facts": [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}}
-   ]
-   Please put your output in <response></response> XML tags.
+   Suggest 3 different tourist highlights for <city> {location} </city>, which are at least 5km apart, in the following format:
+   <response>
+      [
+         {{location: "XXX", fun_facts: [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}},
+         {{location: "XXX", fun_facts: [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}},
+         {{location: "XXX", fun_facts: [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}}
+      ]
+   </response>
+   Delete text outside of the <response></response> tags.
    """
 
    ITINERARY_MAIN_PROMPT = """
@@ -94,4 +96,25 @@ class Prompts:
    ]
    </response>
    Delete text outside of the <response></response> tags.
+   """
+
+   REGENERATE_ITINERARY_PROMPT = """
+   The following is the itinerary for the day:
+
+   <response>
+   {itinerary}
+   </response>
+   Constraints:
+
+   - <user_input>{input}</user_input>
+
+   - New location added to replace an existing location has to have the same start_time and end_time as the location it is replacing.
+
+   - If new location added to replace an existing location has start_time before 13:00, it has to be within 15 minutes walking distance of location with start_time at 13:00 and within 15 minutes walking distance of the location immediately preceding it.
+
+   - If new location added to replace an existing location has start_time after 16:30, it has to be within 15 minutes walking distance of the location immediately preceding it but more than 5km away from the location with start_time before 10:30.
+
+   Regenerate itinerary using the above constraints, while keeping the format of the itinerary output.
+
+   Delete all text outside of <response></response> tags.
    """
