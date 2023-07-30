@@ -8,7 +8,7 @@ Constraints:
 - Exclude <main_quest> Golden Gate Park </main_quest>.
 - Include locations within 30 minutes of <main_quest> Golden Gate Park </main_quest>.
 - Keep locations within 5km of each other.
-- The first event should start at 9am and the last event should end by 12:30pm on the same day. 
+- The first location start_time should be 09:00 and the last location end_time should not exceed 12:30 of the same day.
 - Stay at each location for 90 minutes.
 - Leave a 30 minutes gap between locations for travel time.
 
@@ -19,8 +19,6 @@ Design an itinerary around the constraints, in the following format:
 [ 
     { "location_name": "XXX", 
     "location_address": "XXX", 
-    "latitude": "XXX.XXXXXXX",  
-    "longtitude": "XXX.XXXXXXX",
     "start_time": "XX:XX",  
     "end_time": "XX:XX", 
     } 
@@ -28,8 +26,6 @@ Design an itinerary around the constraints, in the following format:
 [ 
     { "location_name": "XXX", 
     "location_address": "XXX", 
-    "latitude": "XXX.XXXXXXX",  
-    "longtitude": "XXX.XXXXXXX", 
     "start_time": "XX:XX",  
     "end_time": "XX:XX", 
     } 
@@ -43,4 +39,4 @@ Delete text outside of the <response></response> tags.
 
 -- Example output:
 
-<response> [ { "location_name": "Mission Dolores Park", "location_address": "19th St & Dolores St, San Francisco, CA 94114", "latitude": "37.759865", "longitude": "-122.426077", "start_time": "09:00", "end_time": "10:30" }, { "location_name": "San Francisco Museum of Modern Art", "location_address": "151 3rd St, San Francisco, CA 94103", "latitude": "37.785272", "longitude": "-122.401748", "start_time": "11:00", "end_time": "12:30" } ] </response>
+<response> [ { "location_name": "Japanese Tea Garden", "location_address": "75 Hagiwara Tea Garden Dr, San Francisco, CA 94118", "start_time": "09:00", "end_time": "10:30" }, { "location_name": "California Academy of Sciences", "location_address": "55 Music Concourse Dr, San Francisco, CA 94118", "start_time": "11:00", "end_time": "12:30" } ] </response>

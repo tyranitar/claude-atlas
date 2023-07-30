@@ -1,0 +1,38 @@
+-- Main Quest
+
+<prompt>
+"""
+Return the location of <main_quest> Golden Gate Park </main_quest> in the following format in the following format:
+<response>
+[ 
+    { "location_name": use text inside <main_quest></main_quest> tags, 
+    "start_time": "13:00",  
+    "end_time": "16:00", 
+    } 
+]
+</response>
+
+Delete text outside of the <response></response> tags.
+
+"""
+</prompt>
+
+
+-- Example output:
+
+<response>
+[
+
+{
+
+"location_name": "Golden Gate Park",
+
+"start_time": "13:00",
+
+"end_time": "16:00"
+
+}
+
+]
+
+</response>

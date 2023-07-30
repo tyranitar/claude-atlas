@@ -8,7 +8,7 @@ Constraints:
 - Exclude <main_quest> Golden Gate Park </main_quest>.
 - Exclude locations within 5km of the following: <morning_itinerary>[ { "location_name": "Fisherman's Wharf", "location_address": "2850 Taylor St, San Francisco, CA 94133", "start_time": {"09:00"}, "end_time": {"10:00"} }, { "location_name": "Lombard Street", "location_address": "Lombard St, San Francisco, CA 94123", "start_time": {"10:30"}, "end_time": {"11:30"} }, { "location_name": "Pier 39", "location_address": "Beach St &, The Embarcadero, San Francisco, CA 94133", "start_time": {"12:00"}, "end_time": {"12:30"} } ]</morning_itinerary>
 - Keep locations within 5km of each other.
-- The first event should start at 4:30pm and the last event should end by 9pm on the same day.  
+- The first location start_time should be 16:30 and the last location end_time should not exceed 21:00 of the same day.  
 - Stay at each location for 60 minutes.
 - Leave a 30 minutes gap between locations for travel time.
 
@@ -18,8 +18,6 @@ Design an itinerary around the constraints, in the following format:
 [ 
     { "location_name": "XXX", 
     "location_address": "XXX", 
-    "latitude": "XXX.XXXXXXX",  
-    "longtitude": "XXX.XXXXXXX",
     "start_time": "XX:XX",  
     "end_time": "XX:XX", 
     } 
@@ -27,8 +25,6 @@ Design an itinerary around the constraints, in the following format:
 [ 
     { "location_name": "XXX", 
     "location_address": "XXX", 
-    "latitude": "XXX.XXXXXXX",  
-    "longtitude": "XXX.XXXXXXX",
     "start_time": "XX:XX",  
     "end_time": "XX:XX", 
     } 
@@ -42,4 +38,4 @@ Delete text outside of the <response></response> tags.
 
 -- Example output:
 
-<response> [ { "location_name": "Alcatraz Island", "location_address": "Alcatraz Island, San Francisco, CA 94133", "latitude": "37.826972", "longitude": "-122.422939", "start_time": "16:30", "end_time": "17:30" }, { "location_name": "Pier 39", "location_address": "Beach St & The Embarcadero, San Francisco, CA 94133", "latitude": "37.808577", "longitude": "-122.409821", "start_time": "18:00", "end_time": "19:00" }, { "location_name": "Lands End Trail", "location_address": "680 Point Lobos Ave, San Francisco, CA 94121", "latitude": "37.781345", "longitude": "-122.511475", "start_time": "19:30", "end_time": "20:30" } ] </response>
+<response> [ { "location_name": "Palace of Fine Arts", "location_address": "3301 Lyon St, San Francisco, CA 94123", "start_time": "16:30", "end_time": "17:30" }, { "location_name": "Exploratorium", "location_address": "Pier 15, Embarcadero at Green St, San Francisco, CA 94111", "start_time": "18:00", "end_time": "19:00" }, { "location_name": "AT&T Park", "location_address": "24 Willie Mays Plaza, San Francisco, CA 94107", "start_time": "19:30", "end_time": "20:30" } ] </response>
