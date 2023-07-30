@@ -1,6 +1,8 @@
-import { SyncOutlined } from "@ant-design/icons";
+import { LoadingOutlined, SyncOutlined } from "@ant-design/icons";
 import { Button, Card, Typography, theme } from "antd";
 import { QuestCard } from "components/QuestCard";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import {
   useLazyMainQuestsQuery,
   useMainQuestsQuery,
@@ -20,48 +22,102 @@ function RegenerateOptions() {
 }
 
 export default function MainQuestsPage() {
-  const [trigger, { data, isLoading }] = useLazyMainQuestsQuery();
+  const [trigger, { data: quests, isLoading }] = useLazyMainQuestsQuery();
+
   const { token } = useToken();
+  const router = useRouter();
+
+  useEffect(() => {
+    trigger(new URLSearchParams(location.search).get("location")!);
+  }, [trigger]);
 
   return (
     <div className={styles["MainQuestsPage"]}>
       <div className={styles["header"]} style={{ color: token.colorPrimary }}>
         Choose your main quest
       </div>
-      <div className={styles["quests"]}>
-        <QuestCard>
-          <div className={styles["card-content"]}>
-            <div className={styles["description"]}>Description</div>
-            <Button
-              loading={isLoading}
-              type="primary"
-              block
-              onClick={() => {
-                trigger("San Francisco");
-              }}
+      {isLoading ? (
+        <div className={styles["loading-container"]}>
+          <Card>
+            <div>{"Generating travel recommendations..."}</div>
+            <div
+              className={styles["loading-icon"]}
+              style={{ color: token.colorPrimary }}
             >
-              {"Let's go with this!"}
-            </Button>
+              <LoadingOutlined />
+            </div>
+          </Card>
+        </div>
+      ) : (
+        <>
+          <div className={styles["quests"]}>
+            {quests?.map(({ imageUrl, name, funFacts }, idx) => (
+              <QuestCard imageSrc={imageUrl} key={idx}>
+                <div className={styles["card-container"]}>
+                  <div className={styles["card-content"]}>
+                    <div>{name}</div>
+                    <div className={styles["fun-facts"]}>
+                      {funFacts.map((funFact, idx) => (
+                        <div key={idx}>{funFact}</div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={styles["card-footer"]}>
+                    <Button
+                      type="primary"
+                      block
+                      onClick={() => {
+                        const params = new URLSearchParams(location.search);
+                        const loc = params.get("location")!;
+
+                        router.push(
+                          `/itinerary?location=${encodeURIComponent(
+                            loc
+                          )}&quest=${encodeURIComponent(name)}`
+                        );
+                      }}
+                    >
+                      {"Let's go with this!"}
+                    </Button>
+                  </div>
+                </div>
+              </QuestCard>
+            ))}
+            {/* <QuestCard>
+              <div className={styles["card-content"]}>
+                <div className={styles["description"]}>Description</div>
+                <Button
+                  // loading={isLoading}
+                  type="primary"
+                  block
+                  // onClick={() => {
+                  //   trigger("San Francisco");
+                  // }}
+                >
+                  {"Let's go with this!"}
+                </Button>
+              </div>
+            </QuestCard>
+            <QuestCard>
+              <div className={styles["card-content"]}>
+                <div className={styles["description"]}>Description</div>
+                <Button type="primary" block>
+                  {"Let's go with this!"}
+                </Button>
+              </div>
+            </QuestCard>
+            <QuestCard>
+              <div className={styles["card-content"]}>
+                <div className={styles["description"]}>Description</div>
+                <Button type="primary" block>
+                  {"Let's go with this!"}
+                </Button>
+              </div>
+            </QuestCard> */}
           </div>
-        </QuestCard>
-        <QuestCard>
-          <div className={styles["card-content"]}>
-            <div className={styles["description"]}>Description</div>
-            <Button type="primary" block>
-              {"Let's go with this!"}
-            </Button>
-          </div>
-        </QuestCard>
-        <QuestCard>
-          <div className={styles["card-content"]}>
-            <div className={styles["description"]}>Description</div>
-            <Button type="primary" block>
-              {"Let's go with this!"}
-            </Button>
-          </div>
-        </QuestCard>
-      </div>
-      <RegenerateOptions />
+          <RegenerateOptions />
+        </>
+      )}
       <div
         className={styles["background"]}
         style={{ backgroundColor: token.colorPrimary }}

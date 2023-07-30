@@ -5,17 +5,18 @@ import { ReactNode } from "react";
 
 const styles = require("./QuestCard.module.scss");
 
-export function QuestCard({ children }: { children: ReactNode }) {
+export function QuestCard({
+  imageSrc,
+  children,
+}: {
+  imageSrc: string;
+  children: ReactNode;
+}) {
   return (
     <Card
+      cover={<SimpleImage className={styles["image"]} src={imageSrc} />}
       className={styles.QuestCard}
       bordered={true}
-      cover={
-        <SimpleImage
-          className={styles["image"]}
-          src="https://media.timeout.com/images/105879414/750/422/image.jpg"
-        />
-      }
     >
       {children}
     </Card>

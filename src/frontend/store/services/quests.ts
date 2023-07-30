@@ -8,17 +8,42 @@ const questsApi = baseApi.injectEndpoints({
         method: "POST",
         url: `quests`,
         body: {
-          location,
+          city: location,
+        },
+      }),
+
+      transformResponse: (res: any) => {
+        return res.response.map(({ fun_facts, image_url, name }: any) => ({
+          imageUrl: image_url,
+          name,
+          description: "",
+          funFacts: fun_facts,
+        }));
+      },
+    }),
+
+    itinerary: build.query<Quest[], { location: string; quest: string }>({
+      query: ({ location, quest }) => ({
+        method: "POST",
+        url: "itinerary",
+        body: {
+          city: location,
+          quest,
         },
       }),
 
       transformResponse: (res: any) => {
         console.log(res);
 
+        // return res.response.map();
         return res;
       },
     }),
   }),
 });
 
-export const { useMainQuestsQuery, useLazyMainQuestsQuery } = questsApi;
+export const {
+  useMainQuestsQuery,
+  useLazyMainQuestsQuery,
+  useLazyItineraryQuery,
+} = questsApi;

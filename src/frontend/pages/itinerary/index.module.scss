@@ -15,7 +15,7 @@
     padding: 16px 32px;
     text-align: right;
 
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
 
     width: calc((100% - 1000px) / 2);
@@ -88,4 +88,15 @@
       height: 50%;
     }
   }
+}
+
+.point {
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
