@@ -1,3 +1,4 @@
+import { SyncOutlined } from "@ant-design/icons";
 import { Button, Card, Typography, theme } from "antd";
 import { QuestCard } from "components/QuestCard";
 
@@ -5,11 +6,22 @@ const styles = require("./index.module.scss");
 
 const { useToken } = theme;
 
-export default function PrototypePage() {
+function RegenerateOptions() {
+  return (
+    <div className={styles.RegenerateOptions}>
+      <div>{"🤔 Don't like any of the options?"}</div>
+      <Button icon={<SyncOutlined />} type="primary">
+        {"Give me new recommendations"}
+      </Button>
+    </div>
+  );
+}
+
+export default function MainQuestsPage() {
   const { token } = useToken();
 
   return (
-    <div className={styles["PrototypePage"]}>
+    <div className={styles["MainQuestsPage"]}>
       <div className={styles["header"]} style={{ color: token.colorPrimary }}>
         Choose your main quest
       </div>
@@ -39,6 +51,7 @@ export default function PrototypePage() {
           </div>
         </QuestCard>
       </div>
+      <RegenerateOptions />
     </div>
   );
 }
