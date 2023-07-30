@@ -123,8 +123,7 @@ class AgentEngine:
 
         return result
 
-    @staticmethod
-    def sync_calendar(request: SyncCalendarRequest) -> bool:
+    def sync_calendar(self, request: SyncCalendarRequest) -> bool:
         creds = None
         # The file token.json stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
@@ -146,10 +145,16 @@ class AgentEngine:
         try:
             service = build('calendar', 'v3', credentials=creds)
             for itinerary in request.events:
+                lat_long = (itinerary.latitude, itinerary.longitude)
+                location = ''
+                for key, val in self.formatter.address_cache.items():
+                    if val == lat_long:
+                        location = key
                 start_timestamp = f'2023-07-30T{itinerary.start_time}:00-07:00'
                 end_timestamp = f'2023-07-30T{itinerary.end_time}:00-07:00'
                 event = {
                     'summary': f'Visit to {itinerary.name}',
+                    'location': f'{location}',
                     'start': {
                         'dateTime': start_timestamp,
                         'timeZone': 'America/Los_Angeles',

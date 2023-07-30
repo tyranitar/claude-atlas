@@ -18,13 +18,14 @@ gmaps = googlemaps.Client(key=GOOGLE_API_KEY)
 class Formatter:
     lat_long_cache = {}
     image_cache = {}
+    address_cache = {}
 
     @staticmethod
     def format_cache_key(location: str) -> str:
         return location.replace(" ", "-").replace("'", '').replace(",", '').lower()
     
     @classmethod
-    def get_or_cache(cls, image_key: str, location: str, city: str):
+    def get_or_cache_image(cls, image_key: str, location: str, city: str) -> str:
         image_url = cls.image_cache.get(image_key)
         # https://developers.google.com/maps/documentation/places/web-service/photos
         if not image_url:
@@ -34,6 +35,16 @@ class Formatter:
             image_url = f"""https://maps.googleapis.com/maps/api/place/photo?maxwidth={MAX_WIDTH}&maxheight={MAX_HEIGHT}&photo_reference={photo_reference}&key={GOOGLE_API_KEY}"""
             cls.image_cache[image_key] = image_url
         return image_url
+    
+    @classmethod
+    def get_or_cache_address(cls, address_key, geosearch_query: str) -> None:
+        cached_value = cls.address_cache.get(address_key)
+        if not cached_value:
+            print(f"Lat-long for {geosearch_query} not found in address cache...calling the GMaps API...")
+            geocode_result = gmaps.geocode(geosearch_query)
+            latitude = geocode_result[0]['geometry']['location']['lat']
+            longitude = geocode_result[0]['geometry']['location']['lng']
+            cls.address_cache[address_key] = (latitude, longitude)
 
     @classmethod
     def format_quest(cls, city: str, response: str) -> QuestResponse:
@@ -47,7 +58,7 @@ class Formatter:
         for quest in resp:
             location = quest["location"]
             image_formatted_location = cls.format_cache_key(location)
-            image_url = cls.get_or_cache(
+            image_url = cls.get_or_cache_image(
                 image_key=image_formatted_location,
                 location=location,
                 city=city,
@@ -97,11 +108,18 @@ class Formatter:
             location_name = itinerary_block["location_name"]
             geosearch_query = f'{location_name}, {city}'
             latlong_formatted_location = cls.format_cache_key(geosearch_query)
-            image_url = cls.get_or_cache(
+            image_url = cls.get_or_cache_image(
                 image_key=latlong_formatted_location,
                 location=location_name,
                 city=city,
             )
+            # Some blocks don't have "location_address"
+            location_address = itinerary_block.get("location_address")
+            if location_address:
+                cls.get_or_cache_address(
+                    address_key=location_address,
+                    geosearch_query=geosearch_query,
+                )
             cached_value = cls.lat_long_cache.get(latlong_formatted_location)
             if not cached_value:
                 print(f"Lat-long for {geosearch_query} not found in cache...calling the GMaps API...")
