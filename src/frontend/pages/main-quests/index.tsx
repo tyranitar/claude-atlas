@@ -1,6 +1,10 @@
 import { SyncOutlined } from "@ant-design/icons";
 import { Button, Card, Typography, theme } from "antd";
 import { QuestCard } from "components/QuestCard";
+import {
+  useLazyMainQuestsQuery,
+  useMainQuestsQuery,
+} from "store/services/quests";
 
 const styles = require("./index.module.scss");
 
@@ -10,14 +14,13 @@ function RegenerateOptions() {
   return (
     <div className={styles.RegenerateOptions}>
       <div>{"🤔 Don't like any of the options?"}</div>
-      <Button icon={<SyncOutlined />} type="primary">
-        {"Give me new recommendations"}
-      </Button>
+      <Button icon={<SyncOutlined />}>{"Give me new recommendations"}</Button>
     </div>
   );
 }
 
 export default function MainQuestsPage() {
+  const [trigger, { data, isLoading }] = useLazyMainQuestsQuery();
   const { token } = useToken();
 
   return (
@@ -29,7 +32,14 @@ export default function MainQuestsPage() {
         <QuestCard>
           <div className={styles["card-content"]}>
             <div className={styles["description"]}>Description</div>
-            <Button type="primary" block>
+            <Button
+              loading={isLoading}
+              type="primary"
+              block
+              onClick={() => {
+                trigger("San Francisco");
+              }}
+            >
               {"Let's go with this!"}
             </Button>
           </div>
@@ -52,6 +62,10 @@ export default function MainQuestsPage() {
         </QuestCard>
       </div>
       <RegenerateOptions />
+      <div
+        className={styles["background"]}
+        style={{ backgroundColor: token.colorPrimary }}
+      ></div>
     </div>
   );
 }

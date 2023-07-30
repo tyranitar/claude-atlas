@@ -1,0 +1,91 @@
+.ItineraryPage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  // padding: 8px 0px;
+  height: 100%;
+
+  .sidebar {
+    box-sizing: border-box;
+    height: 100%;
+
+    color: white;
+    padding: 16px 32px;
+    text-align: right;
+
+    font-size: 32px;
+    font-weight: bold;
+
+    width: calc((100% - 1000px) / 2);
+
+    // min-width: 0px;
+
+    // flex-grow: 1;
+
+    // display: flex;
+
+    // .text {
+    //   white-space: pre-wrap;
+    // }
+  }
+
+  .card {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+
+    :global .ant-card-body {
+      padding: 0px;
+    }
+  }
+
+  .left-column {
+    box-sizing: border-box;
+    width: 400px;
+    height: 100%;
+
+    // border-left: 1px solid lightgray;
+
+    .itinerary {
+      box-sizing: border-box;
+      height: 100%;
+      padding: 8px;
+
+      .card {
+        overflow: auto;
+
+        :global .ant-card-body {
+          padding: 12px;
+
+          & > :not(:first-child) {
+            margin-top: 12px;
+          }
+        }
+      }
+    }
+  }
+
+  .right-column {
+    box-sizing: border-box;
+    width: 600px;
+    height: 100%;
+
+    // border-left: 1px solid lightgray;
+    // border-right: 1px solid lightgray;
+
+    .map {
+      box-sizing: border-box;
+      padding: 8px;
+      height: 50%;
+    }
+
+    .chat {
+      // border-top: 1px solid lightgray;
+      box-sizing: border-box;
+      padding: 8px;
+      height: 50%;
+    }
+  }
+}

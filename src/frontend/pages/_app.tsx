@@ -3,10 +3,11 @@ import "../styles/global.scss";
 import { ConfigProvider } from "antd";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import { wrapper } from "store";
 
 const styles = require("./App.module.scss");
 
-export default function App({ Component, pageProps }: AppProps) {
+export function App({ Component, pageProps }: AppProps) {
   return (
     <ConfigProvider
       theme={{
@@ -22,3 +23,5 @@ export default function App({ Component, pageProps }: AppProps) {
     </ConfigProvider>
   );
 }
+
+export default wrapper.withRedux(App);

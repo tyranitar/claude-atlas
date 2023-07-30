@@ -1,6 +1,19 @@
 .MainQuestsPage {
-  // display: flex;
-  padding-top: 128px;
+  box-sizing: border-box;
+  padding-top: 64px;
+  height: 100%;
+
+  overflow: auto;
+
+  position: relative;
+
+  .background {
+    width: 100%;
+    height: 65%;
+    position: absolute;
+    bottom: 0px;
+    z-index: -1;
+  }
 
   & > :not(:first-child) {
     margin-top: 64px;
@@ -17,6 +30,8 @@
 
   .quests {
     display: flex;
+    justify-content: center;
+    align-items: center;
 
     & > :not(:first-child) {
       margin-left: 12px;
@@ -34,6 +49,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    color: white;
 
     & > :not(:first-child) {
       margin-top: 12px;

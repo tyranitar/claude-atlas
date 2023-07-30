@@ -8,6 +8,6 @@ type RestBaseQueryArgs = {
 type BaseQueryArgs = RestBaseQueryArgs;
 
 export const baseQuery = fetchBaseQuery({
-  baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/api`,
+  baseUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
   //   prepareHeaders,
 });
