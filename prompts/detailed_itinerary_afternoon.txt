@@ -42,7 +42,4 @@ Delete text outside of the <response></response> tags.
 
 -- Example output:
 
-Here is a suggested evening itinerary for your day in San Francisco excluding locations within 5km of Fisherman's Wharf, Lombard Street, and Pier 39:
-
-<response> [ { "location_name": "Legion of Honor", "location_address": "100 34th Ave, San Francisco, CA 94121", "start_time": {"16:30"}, "end_time": {"17:30"} }, { "location_name": "Lands End Trail", "location_address": "680 Point Lobos Ave, San Francisco, CA 94121", "start_time": {"18:00"}, "end_time": {"19:00"} }, { "location_name": "Cliff House", "location_address": "1090 Point Lobos Ave, San Francisco, CA 94121", "start_time": {"19:30"}, "end_time": {"20:30"} } ] </response>
-I selected some scenic spots in the northwest area of San Francisco like the Legion of Honor museum, Lands End hiking trail, and Cliff House restaurant. Let me know if you would like me to modify the evening itinerary further.
+<response> [ { "location_name": "Alcatraz Island", "location_address": "Alcatraz Island, San Francisco, CA 94133", "latitude": "37.826972", "longitude": "-122.422939", "start_time": "16:30", "end_time": "17:30" }, { "location_name": "Pier 39", "location_address": "Beach St & The Embarcadero, San Francisco, CA 94133", "latitude": "37.808577", "longitude": "-122.409821", "start_time": "18:00", "end_time": "19:00" }, { "location_name": "Lands End Trail", "location_address": "680 Point Lobos Ave, San Francisco, CA 94121", "latitude": "37.781345", "longitude": "-122.511475", "start_time": "19:30", "end_time": "20:30" } ] </response>
