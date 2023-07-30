@@ -1,25 +1,19 @@
 -- Main Quest Brainstorm Prompt
 
-<prompt>
-    Suggest 3 popular and different tourist highlights for <city> Singapore </city>, which are at least 5km apart in the following format:
-    <output>
-        [ 
-            {
-                'location': "XXX", 
-                'fun_facts': [<fun_fact_1>, 
-                            <fun_fact_2>, 
-                            <fun_fact_3>],
-            },
-            {
-                'location': "XXX", 
-                'fun_facts': [<fun_fact_1>, 
-                            <fun_fact_2>, 
-                            <fun_fact_3>],
-            },
-        ]
-    </output>
-</prompt>
 
+<prompt>
+"""
+Can you suggest me 3 different tourist highlights for <city> {location} </city>, which are at least 5km apart?
+
+Example of output (including tags):
+    [
+        {{location: "Singapore Zoo", fun_facts: [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}},
+        {{location: "Sentosa", fun_facts: [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}}
+    ]
+
+Put your output in <response></response> XML tags.
+"""
+</prompt>
 
 -- Example output:
  [
