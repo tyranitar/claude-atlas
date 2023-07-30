@@ -153,15 +153,45 @@ class Formatter:
 
         response = response[idx1 + len(BLOCK_START_TAG) + 1: idx2]
         itinerary = json.loads(response)
-        print(itinerary)
 
         itinerary_blocks = []
-        # image_formatted_location = cls.format_cache_key(location)
-        # image_url = cls.get_or_cache(
-        #     image_key=image_formatted_location,
-        #     location=location,
-        # )
-        formatted_response = ChatResponse(
+        for itinerary_block in itinerary:
+            location_name = itinerary_block["name"]
+            geosearch_query = f'{location_name}, {city}'
+            latlong_formatted_location = cls.format_cache_key(geosearch_query)
+            image_url = cls.get_or_cache_image(
+                image_key=latlong_formatted_location,
+                location=location_name,
+                city=city,
+            )
+            # Some blocks don't have "location_address"
+            # location_address = itinerary_block.get("location_address")
+            # if location_address:
+            #     cls.get_or_cache_address(
+            #         address_key=location_address,
+            #         geosearch_query=geosearch_query,
+            #     )
+            cached_value = cls.lat_long_cache.get(latlong_formatted_location)
+            if not cached_value:
+                print(f"Lat-long for {geosearch_query} not found in cache...calling the GMaps API...")
+                geocode_result = gmaps.geocode(geosearch_query)
+                latitude = geocode_result[0]['geometry']['location']['lat']
+                longitude = geocode_result[0]['geometry']['location']['lng']
+                cls.lat_long_cache[latlong_formatted_location] = (latitude, longitude)
+            else:
+                latitude = cached_value[0]
+                longitude = cached_value[1]
+            itinerary_blocks.append(
+                ItineraryBlock(
+                    name=location_name,
+                    latitude=latitude,
+                    longitude=longitude,
+                    start_time=itinerary_block["start_time"],
+                    end_time=itinerary_block["end_time"],
+                    image_url=image_url,
+                )
+            )
+        formatted_response = ItineraryResponse(
             response=itinerary_blocks
         )
 

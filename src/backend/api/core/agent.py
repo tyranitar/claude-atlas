@@ -36,7 +36,10 @@ SCOPES = [
 
 class AgentEngine:
     def __init__(self, formatter: Formatter):
-        self.llm = ChatAnthropic()
+        self.llm = ChatAnthropic(
+            max_tokens_to_sample=10000,
+            temperature=0
+        )
         self.prompts = Prompts()
         self.formatter = formatter
 
@@ -84,8 +87,6 @@ class AgentEngine:
         )
         chain = LLMChain(llm=self.llm, prompt=prompt)
         response = chain.run(itinerary=itinerary_str, input=request.input)
-        print("See resp")
-        print(response)
 
         return response
 
