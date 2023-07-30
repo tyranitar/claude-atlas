@@ -7,10 +7,11 @@ Constraints:
 - I'm visiting <city_name> San Francisco </city_name>.  
 - Exclude <main_quest> Golden Gate Park </main_quest>.
 - Exclude locations within 5km of the following: <morning_itinerary>[ { "location_name": "Fisherman's Wharf", "location_address": "2850 Taylor St, San Francisco, CA 94133", "start_time": {"09:00"}, "end_time": {"10:00"} }, { "location_name": "Lombard Street", "location_address": "Lombard St, San Francisco, CA 94123", "start_time": {"10:30"}, "end_time": {"11:30"} }, { "location_name": "Pier 39", "location_address": "Beach St &, The Embarcadero, San Francisco, CA 94133", "start_time": {"12:00"}, "end_time": {"12:30"} } ]</morning_itinerary>
+- Keep locations within 5km of each other.
 - Start at 4:30pm and end at 9pm. 
 - Stay at each location for 60 minutes.
 - Leave a 30 minutes gap between locations for travel time.
-- Keep locations within 5km of each other.
+
 
 Design an itinerary around the constraints, in the following format:
 <response>
@@ -33,6 +34,8 @@ Design an itinerary around the constraints, in the following format:
     } 
 ]
 </response>
+
+Delete text outside of the <response></response> tags.
 
 """
 </prompt>
