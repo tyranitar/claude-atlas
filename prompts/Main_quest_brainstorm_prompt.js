@@ -4,12 +4,15 @@
 <prompt>
 """
 Suggest 3 different tourist highlights for <city> {location} </city>, which are at least 5km apart, in the following format:
+<response>
     [
-        {{location: "Singapore Zoo", fun_facts: [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}},
-        {{location: "Sentosa", fun_facts: [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}}
+        {{location: "XXX", fun_facts: [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}},
+        {{location: "XXX", fun_facts: [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}},
+        {{location: "XXX", fun_facts: [<fun_fact_1>, <fun_fact_2>, <fun_fact_3>]}}
     ]
+</response>
 
-Put your output in <response></response> XML tags.
+Delete text outside of the <response></response> tags.
 """
 </prompt>
 
