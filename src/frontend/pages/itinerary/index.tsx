@@ -3,12 +3,13 @@ import { Card, theme } from "antd";
 import { useLazyItineraryQuery } from "store/services/quests";
 import GoogleMapReact from "google-map-react";
 import { useEffect, useState } from "react";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const { useToken } = theme;
 
 const styles = require("./index.module.scss");
 
-const AnyReactComponent = ({ index }: { index: number }) => {
+const MapPoint = ({ index }: { index: number }) => {
   const { token } = useToken();
 
   return (
@@ -53,7 +54,7 @@ export default function ItineraryPage() {
       <div className={styles["left-column"]}>
         <div className={styles["itinerary"]}>
           <Card className={styles["card"]}>
-            <QuestCard imageSrc="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/33/dc/8a/caption.jpg?w=700&h=-1&s=1">
+            {/* <QuestCard imageSrc="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/33/dc/8a/caption.jpg?w=700&h=-1&s=1">
               <div>Test</div>
             </QuestCard>
             <QuestCard imageSrc="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/33/dc/8a/caption.jpg?w=700&h=-1&s=1">
@@ -73,7 +74,33 @@ export default function ItineraryPage() {
             </QuestCard>
             <QuestCard imageSrc="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/33/dc/8a/caption.jpg?w=700&h=-1&s=1">
               <div>Test</div>
-            </QuestCard>
+            </QuestCard> */}
+            {isLoading ? (
+              <div>
+                <LoadingOutlined />
+              </div>
+            ) : (
+              data?.map(
+                (
+                  {
+                    imageUrl,
+                    name,
+                    description,
+                    // latitude,
+                    // longitude,
+                    startTime,
+                    endTime,
+                  },
+                  idx
+                ) => (
+                  <QuestCard key={idx} imageSrc={imageUrl}>
+                    <div>
+                      {idx + 1}. {name}
+                    </div>
+                  </QuestCard>
+                )
+              )
+            )}
           </Card>
         </div>
       </div>
@@ -90,23 +117,34 @@ export default function ItineraryPage() {
                 boxSizing: "border-box",
               }}
             >
-              <GoogleMapReact
-                bootstrapURLKeys={{
-                  key: "AIzaSyDR39HxOW9dvteOXkmHU1sgqGOjCmgj9Qc",
-                }}
-                defaultCenter={{
-                  lat: 59.955413,
-                  lng: 30.337844,
-                }}
-                defaultZoom={11}
-              >
-                <AnyReactComponent
+              {data && (
+                <GoogleMapReact
+                  bootstrapURLKeys={{
+                    key: "AIzaSyDR39HxOW9dvteOXkmHU1sgqGOjCmgj9Qc",
+                  }}
+                  defaultCenter={{
+                    lat: data[0]!.latitude,
+                    lng: data[0]!.longitude,
+                  }}
+                  defaultZoom={12}
+                >
+                  {/* <MapPoint
                   // @ts-ignore
                   lat={59.955413}
                   lng={30.337844}
                   index={1}
-                />
-              </GoogleMapReact>
+                /> */}
+                  {data.map(({ latitude, longitude }, idx) => (
+                    <MapPoint
+                      // @ts-ignore
+                      lat={latitude}
+                      lng={longitude}
+                      index={idx + 1}
+                      key={idx}
+                    />
+                  ))}
+                </GoogleMapReact>
+              )}
             </div>
           </Card>
         </div>

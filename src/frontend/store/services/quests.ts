@@ -22,7 +22,16 @@ const questsApi = baseApi.injectEndpoints({
       },
     }),
 
-    itinerary: build.query<Quest[], { location: string; quest: string }>({
+    itinerary: build.query<
+      (Quest & {
+        latitude: number;
+        longitude: number;
+        name: string;
+        startTime: string;
+        endTime: string;
+      })[],
+      { location: string; quest: string }
+    >({
       query: ({ location, quest }) => ({
         method: "POST",
         url: "itinerary",
@@ -36,7 +45,25 @@ const questsApi = baseApi.injectEndpoints({
         console.log(res);
 
         // return res.response.map();
-        return res;
+        return res.response.map(
+          ({
+            image_url,
+            name,
+            latitude,
+            longitude,
+            start_time,
+            end_time,
+          }: any) => ({
+            imageUrl: image_url,
+            name,
+            description: "",
+            funFacts: [],
+            latitude,
+            longitude,
+            startTime: start_time,
+            endTime: end_time,
+          })
+        );
       },
     }),
   }),
