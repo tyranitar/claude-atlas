@@ -5,7 +5,6 @@
 """
 The following is the itinerary for the day:
 
-<response>
 [ { "name": "California Academy of Sciences", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30" }, 
   { "name": "Japanese Tea Garden", "latitude": 37.770383, "longitude": -122.4701793, "start_time": "11:00", "end_time": "12:30" }, 
   { "name": "Golden Gate Park", "latitude": 37.7694208, "longitude": -122.4862138, "start_time": "13:00", "end_time": "16:00" }, 
@@ -14,7 +13,6 @@ The following is the itinerary for the day:
   { "name": "Fisherman's Wharf", "latitude": 37.8085771, "longitude": -122.4125282, "start_time": "19:30", "end_time": "20:30" } 
 ]
 
-</response>
 Constraints:
 
 - <user_input>"Replace the 11am location. Replace the 430pm location. Keep all other locations."</user_input>
@@ -51,7 +49,6 @@ Delete all text outside of <response></response> tags.
 -- Example input #2:
 The following is the itinerary for the day:
 
-<response>
 [ { "name": "Exploratorium", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30" },
 
 { "name": "Ferry Building Marketplace", "latitude": 37.770383, "longitude": -122.4701793, "start_time": "11:00", "end_time": "12:30" },
@@ -66,7 +63,6 @@ The following is the itinerary for the day:
 
 ]
 
-</response>
 Constraints:
 
 "Replace the 11am and 6pm locations, but keep the 730pm one."
@@ -83,3 +79,17 @@ Delete all text outside of <response></response> tags.
 [{"name": "Exploratorium", "latitude": 37.7698646, "longitude": -122.4660947, "start_time": "09:00", "end_time": "10:30"}, {"name": "Palace of Fine Arts", "latitude": 37.802379, "longitude": -122.44982, "start_time": "11:00", "end_time": "12:30"}, {"name": "Golden Gate Park", "latitude": 37.7694208, "longitude": -122.4862138, "start_time": "13:00", "end_time": "16:00"}, {"name": "Fort Mason Center", "latitude": 37.808528, "longitude": -122.433487, "start_time": "16:30", "end_time": "17:30"}, {"name": "Castro Street", "latitude": 37.8020074, "longitude": -122.4195532, "start_time": "18:00", "end_time": "19:00"}, {"name": "Corona Heights Park", "latitude": 37.8085771, "longitude": -122.4125282, "start_time": "19:30", "end_time": "20:30"} ]
 
 </response>
+
+
+
+The following is the itinerary for the day:
+
+<response>
+[
+        { "name": "California Academy of Sciences", "latitude": 37.7698646, "longitude": -122.4660947, "start_time":"09:00", "end_time": "10:30" }, 
+        { "name": "Japanese Tea Garden", "latitude": 37.770383, "longitude": -122.4701793, "start_time": "11:00", "end_time": "12:30" }, 
+        { "name": "Golden Gate Park", "latitude": 37.7694208, "longitude": -122.4862138, "start_time": "13:00", "end_time": "16:00" }, 
+        { "name": "Pier 39", "latitude": 37.80867300000001, "longitude": -122.409821, "start_time": "16:30", "end_time": "17:30" },
+        { "name": "Lombard Street", "latitude": 37.8020074, "longitude": -122.4195532, "start_time": "18:00", "end_time": "19:00"},
+        { "name": "Fisherman's Wharf", "latitude": 37.8085771, "longitude": -122.4125282, "start_time": "19:30", "end_time": "20:30" }
+    ]
