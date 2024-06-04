@@ -1,4 +1,4 @@
-# anthropic-hackathon
+# claude-atlas
 
 
 ### Backend 
